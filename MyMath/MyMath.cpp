@@ -76,3 +76,22 @@ void MyMath::VectorScreenPrintf(int x, int y, const Vector3& vector, const char*
 	Novice::ScreenPrintf(x + kColumnWidth * 2, y, "%.02f", vector.z);
 	Novice::ScreenPrintf(x + kColumnWidth * 3, y, "%s", label);
 }
+
+//ベクトル射影
+Vector3 MyMath::Project(const Vector3& v1, const Vector3& v2) {
+	Vector3 result;
+
+	//媒介変数t
+	float t = Dot(v1, Normalize(v2));
+	result = t * Normalize(v2);
+	return result;
+}
+
+Vector3 MyMath::ClosestPoint(const Vector3& point, const Segment& segment) {
+	Vector3 result;
+	result = segment.origin + point;
+}
+
+
+
+

@@ -156,5 +156,6 @@
     <ClInclude Include="Sphere.h">
       <Filter>Shapes</Filter>
     </ClInclude>
+    <ClInclude Include="Lines.h" />
   </ItemGroup>
 </Project>

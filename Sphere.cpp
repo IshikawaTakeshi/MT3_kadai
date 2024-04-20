@@ -8,10 +8,10 @@
 #include <imgui.h>
 #endif // _DEBUG
 
-Sphere::Sphere() {
-	centerPos_ = { 0.0f,0.0f,0.0f };
-	radius_ = 0.5f;
-	worldMatrix_ = MatrixMath::MakeAffineMatrix({ 1.0f,1.0f,1.0f }, { 0.0f,0.0f,0.0f }, centerPos_);
+Sphere::Sphere(Vector3 centerPos, float radius) {
+	centerPos_ = centerPos;
+	radius_ = radius;
+	worldMatrix_ = MatrixMath::MakeAffineMatrix({ 1.0f,1.0f,1.0f }, { 0.0f,0.0f,0.0f },centerPos_);
 }
 
 Sphere::~Sphere() {
