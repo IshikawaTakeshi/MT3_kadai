@@ -9,7 +9,7 @@
 #include <imgui.h>
 #endif // _DEBUG
 
-const char kWindowTitle[] = "LC1B_02_イシカワタケシ_MT3";
+const char kWindowTitle[] = "LE2C_03_イシカワタケシ_MT3_02_01";
 
 // Windowsアプリでのエントリーポイント(main関数)
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
