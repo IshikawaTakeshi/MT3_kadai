@@ -8,6 +8,8 @@ Grid::Grid() {
 	worldMatrix_ = MatrixMath::MakeAffineMatrix({ 1.0f,1.0f,1.0f }, rotate_, pos_);
 }
 
+Grid::~Grid() {}
+
 void Grid::Update() {
 	worldMatrix_ = MatrixMath::MakeAffineMatrix({ 1.0f,1.0f,1.0f }, rotate_, pos_);
 }

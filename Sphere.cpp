@@ -2,7 +2,7 @@
 #include "MyMath/MatrixMath.h"
 #include "MyMath/MyMath.h"
 #include "Novice.h"
-
+#include <string>
 
 #ifdef _DEBUG
 #include <imgui.h>
@@ -11,24 +11,28 @@
 Sphere::Sphere(Vector3 centerPos, float radius) {
 	centerPos_ = centerPos;
 	radius_ = radius;
+	color_ = 0xffffffff;
 	worldMatrix_ = MatrixMath::MakeAffineMatrix({ 1.0f,1.0f,1.0f }, { 0.0f,0.0f,0.0f },centerPos_);
 }
 
 Sphere::~Sphere() {
 }
 
-void Sphere::Update() {
+void Sphere::Update(int id) {
 	worldMatrix_ = MatrixMath::MakeAffineMatrix({ 1.0f,1.0f,1.0f }, { 0.0f,0.0f,0.0f }, centerPos_);
 
 #ifdef _DEBUG
-	ImGui::Begin("Window::Sphere");
+	std::string label = "Window::Sphere";
+	label += "##" + std::to_string(id);
+	ImGui::Begin(label.c_str());
 	ImGui::DragFloat3("SphereTranslate", &centerPos_.x, 0.01f);
 	ImGui::DragFloat("SphereRadius", &radius_, 0.01f);
+	
 	ImGui::End();
 #endif // _DEBUG
 }
 
-void Sphere::Draw(const Matrix4x4& viewProjectionMatrix, const Matrix4x4& viewportMatrix, uint32_t color) {
+void Sphere::Draw(const Matrix4x4& viewProjectionMatrix, const Matrix4x4& viewportMatrix) {
 	const uint32_t kSubdivision = 16;
 	const float kLonEvery = static_cast<float>(M_PI) / static_cast<float>(kSubdivision); // 経度分割1つ分の角度
 	const float kLatEvery = 2.0f * static_cast<float>(M_PI) / static_cast<float>(kSubdivision); // 緯度分割1つ分の角度
@@ -60,15 +64,25 @@ void Sphere::Draw(const Matrix4x4& viewProjectionMatrix, const Matrix4x4& viewpo
 				static_cast<int>(screenA.y),
 				static_cast<int>(screenB.x),
 				static_cast<int>(screenB.y),
-				color
+				color_
 			);
 			Novice::DrawLine(
 				static_cast<int>(screenA.x),
 				static_cast<int>(screenA.y),
 				static_cast<int>(screenC.x),
 				static_cast<int>(screenC.y),
-				color
+				color_
 			);
 		}
 	}
+}
+
+bool Sphere::IsCollision(const Sphere& s1, const Sphere& s2) {
+	//	2つの弾の中心点間を求める
+	float distance = MyMath::Length(MyMath::Subtract(s2.centerPos_, s1.centerPos_));
+	//半径の合計よりも短ければ衝突
+	if (distance <= s1.radius_ + s2.radius_) {
+		return true;
+	}
+	return false;
 }
