@@ -36,7 +36,6 @@ public:
 
 public:
 
-
 	//ベクトル射影
 	static Vector3 Project(const Vector3& v1, const Vector3& v2);
 
