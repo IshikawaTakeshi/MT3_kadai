@@ -1,5 +1,5 @@
 ﻿#pragma once
-#include <vector3.h>
+#include <Vector3.h>
 #include "Lines.h"
 
 class MyMath {
@@ -12,6 +12,12 @@ public:
 
 	//乗算
 	static Vector3 Multiply(float scalar, const Vector3& v);
+
+	//乗算
+	static Vector3 Multiply(const Vector3& v1, const Vector3& v2);
+
+	//商算
+	static Vector3 Devide(float scalar, const Vector3& v);
 
 	//内積
 	static float Dot(const Vector3& v1, const Vector3& v2);

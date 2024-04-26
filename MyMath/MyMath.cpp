@@ -33,6 +33,22 @@ Vector3 MyMath::Multiply(float scalar, const Vector3& v) {
 	return result;
 }
 
+Vector3 MyMath::Multiply(const Vector3& v1, const Vector3& v2) {
+	Vector3 result;
+	result.x = v1.x * v2.x;
+	result.y = v1.y * v2.y;
+	result.z = v1.z * v2.z;
+	return result;
+}
+
+Vector3 MyMath::Devide(float scalar, const Vector3& v) {
+	Vector3 result;
+	result.x = scalar / v.x;
+	result.y = scalar / v.y;
+	result.z = scalar / v.z;
+	return result;
+}
+
 //内積
 float MyMath::Dot(const Vector3& v1, const Vector3& v2) {
 	float result;
@@ -80,16 +96,15 @@ void MyMath::VectorScreenPrintf(int x, int y, const Vector3& vector, const char*
 //ベクトル射影
 Vector3 MyMath::Project(const Vector3& v1, const Vector3& v2) {
 	Vector3 result;
-
-	//媒介変数t
-	float t = Dot(v1, Normalize(v2));
-	result = t * Normalize(v2);
+	result = Multiply(Dot(v1, Normalize(v2)),Normalize(v2));
 	return result;
 }
 
+//最近接点
 Vector3 MyMath::ClosestPoint(const Vector3& point, const Segment& segment) {
 	Vector3 result;
-	result = segment.origin + point;
+	result = Add(segment.origin, point);
+	return result;
 }
 
 
