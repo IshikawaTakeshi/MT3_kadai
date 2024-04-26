@@ -11,6 +11,7 @@
 
 class MatrixMath {
 public:
+
 	//行列の加法
 	static Matrix4x4 Add(const Matrix4x4& m1, const Matrix4x4& m2);
 

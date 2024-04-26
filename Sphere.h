@@ -6,7 +6,7 @@
 
 class Sphere {
 public:
-	Sphere();
+	Sphere(Vector3 centerPos,float radius);
 	~Sphere();
 	void Update();
 	void Draw(
