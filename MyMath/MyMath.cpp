@@ -96,8 +96,10 @@ void MyMath::VectorScreenPrintf(int x, int y, const Vector3& vector, const char*
 
 //ベクトル射影
 Vector3 MyMath::Project(const Vector3& v1, const Vector3& v2) {
+	float t;
 	Vector3 result;
-	result = Multiply(Dot(v1, Normalize(v2)), Normalize(v2));
+	t = Dot(v1, v2) / powf(Length(v2), 2);
+	result = Multiply(t, v2);
 	return result;
 }
 
