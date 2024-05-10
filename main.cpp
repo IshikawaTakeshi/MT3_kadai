@@ -57,6 +57,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		sphere[0]->Update(0);
 		sphere[1]->Update(1);
 
+
+		//当たり判定
 		if (Sphere::IsCollision(*sphere[0], *sphere[1]) == true) {
 			sphere[0]->SetColor(0xff0000ff);
 		} else {
