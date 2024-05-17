@@ -65,6 +65,9 @@
     <ClCompile Include="Sphere.cpp">
       <Filter>Shapes</Filter>
     </ClCompile>
+    <ClCompile Include="Plane.cpp">
+      <Filter>KamataEngine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="C:\KamataEngine\DirectXGame\audio\Audio.h">
@@ -157,5 +160,6 @@
       <Filter>Shapes</Filter>
     </ClInclude>
     <ClInclude Include="Lines.h" />
+    <ClInclude Include="Plane.h" />
   </ItemGroup>
 </Project>

@@ -2,6 +2,7 @@
 #include <Vector3.h>
 #include "Lines.h"
 
+struct PlaneData;
 class MyMath {
 public:
 	//加算
@@ -28,6 +29,9 @@ public:
 	//長さ(ノルム)
 	static float Length(const Vector3& v);
 
+	//平面と点の距離
+	static float Distance(const Vector3& sphereCenter, const PlaneData& plane);
+
 	//正規化
 	static Vector3 Normalize(const Vector3& v);
 
@@ -41,6 +45,9 @@ public:
 
 	//最近接点
 	static Vector3 ClosestPoint(const Vector3& point, const Segment& segment);
+
+	//垂直なベクトルを求める関数
+	static Vector3 Perpendicular(const Vector3& vector);
 
 public:
 	

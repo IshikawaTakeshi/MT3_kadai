@@ -4,18 +4,24 @@
 #include "Grid/Grid.h"
 #include "Camera/Camera.h"
 #include "Sphere.h"
+#include "Plane.h"
 
 #ifdef _DEBUG
 #include <imgui.h>
 #endif // _DEBUG
 
-const char kWindowTitle[] = "LE2C_03_イシカワタケシ_MT3";
+const char kWindowTitle[] = "LE2C_03_イシカワタケシ_MT3_02_02";
 
 // Windowsアプリでのエントリーポイント(main関数)
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	// ライブラリの初期化
 	Novice::Initialize(kWindowTitle, 1280, 720);
+
+	Sphere* sphere = new Sphere({ 0,0,0 }, 5.0f);
+	Grid* grid = new Grid();
+	Camera* camera = new Camera();
+	Plane* plane = new Plane();
 
 	// キー入力結果を受け取る箱
 	char keys[256] = {0};

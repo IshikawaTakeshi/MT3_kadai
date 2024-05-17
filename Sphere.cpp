@@ -1,6 +1,7 @@
 ﻿#include "Sphere.h"
 #include "MyMath/MatrixMath.h"
 #include "MyMath/MyMath.h"
+#include "Plane.h"
 #include "Novice.h"
 
 
@@ -71,4 +72,12 @@ void Sphere::Draw(const Matrix4x4& viewProjectionMatrix, const Matrix4x4& viewpo
 			);
 		}
 	}
+}
+
+bool Sphere::IsCollision(const PlaneData& plane) {
+	
+	if (MyMath::Distance(centerPos_, plane) <= radius_) {
+		return true;
+	}
+	return false;
 }

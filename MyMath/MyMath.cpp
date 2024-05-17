@@ -1,4 +1,5 @@
 ﻿#include "MyMath.h"
+#include "Plane.h"
 #include "Novice.h"
 #include <cmath>
 
@@ -74,6 +75,12 @@ float MyMath::Length(const Vector3& v) {
 	return result;
 }
 
+float MyMath::Distance(const Vector3& sphereCenter, const PlaneData& plane) {
+	float result;
+	result = Dot(plane.normal, sphereCenter) - plane.distance;
+	return result;
+}
+
 //正規化
 Vector3 MyMath::Normalize(const Vector3& v) {
 	Vector3 result;
@@ -106,4 +113,13 @@ Vector3 MyMath::ClosestPoint(const Vector3& point, const Segment& segment) {
 	Vector3 result;
 	result = Add(segment.origin, point);
 	return result;
+}
+
+//垂直なベクトルを求める関数
+Vector3 MyMath::Perpendicular(const Vector3& vector) {
+	
+	if (vector.x != 0.0f || vector.y != 0.0f) {
+		return { -vector.y,vector.x,0.0f };
+	}
+	return { 0.0f,-vector.z,vector.y };
 }
