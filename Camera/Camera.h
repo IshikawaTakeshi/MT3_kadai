@@ -23,6 +23,9 @@ private:
 
 	//カメラの回転
 	Vector3 cameraRotate_;
+
+	//拡縮
+	Vector3 cameraScale_;
 	
 	//world座標
 	Matrix4x4 worldMatrix_;

@@ -74,6 +74,12 @@ float MyMath::Length(const Vector3& v) {
 	return result;
 }
 
+float MyMath::Distance(const Vector3& v1, const Vector3& v2) {
+	float result;
+	result = sqrtf((v1.x * v2.x) + (v1.y * v2.y) + (v1.z * v2.z));
+	return result;
+}
+
 //正規化
 Vector3 MyMath::Normalize(const Vector3& v) {
 	Vector3 result;
