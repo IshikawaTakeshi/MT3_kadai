@@ -18,10 +18,17 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	// ライブラリの初期化
 	Novice::Initialize(kWindowTitle, 1280, 720);
 
-	Sphere* sphere = new Sphere({ 0,0,0 }, 5.0f);
+	Sphere* sphere = new Sphere({ 0,0,0 }, 0.5f);
 	Grid* grid = new Grid();
 	Camera* camera = new Camera();
 	Plane* plane = new Plane();
+
+	//射影行列
+	Matrix4x4 projectionMatrix = MatrixMath::MakePerspectiveFovMatrix(0.45f, 1280.0f / 720.0f, 0.1f, 100.0f);
+	Matrix4x4 viewProjectionMatrix = MatrixMath::Multiply(camera->GetViewMatrix(), projectionMatrix);
+	//ビューポート変換行列
+	Matrix4x4 viewportMatrix = MatrixMath::MakeViewportMatrix(0, 0, 1280.0f, 720.0f, 0.0f, 1.0f);
+
 
 	// キー入力結果を受け取る箱
 	char keys[256] = {0};
@@ -40,6 +47,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		/// ↓更新処理ここから
 		///
 
+		camera->Update();
+		grid->Update();
+		plane->Update();
+		sphere->Update(plane->GetPlaneData());
+		
+		
+		viewProjectionMatrix = MatrixMath::Multiply(camera->GetViewMatrix(), projectionMatrix);
+
 		///
 		/// ↑更新処理ここまで
 		///
@@ -49,6 +64,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		///
 		/// ↓描画処理ここから
 		///
+
+		sphere->Draw(viewProjectionMatrix, viewportMatrix);
+		grid->Draw(viewProjectionMatrix, viewportMatrix);
+		plane->Draw(viewProjectionMatrix, viewportMatrix);
+
 
 		///
 		/// ↑描画処理ここまで

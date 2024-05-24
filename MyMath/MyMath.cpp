@@ -75,9 +75,13 @@ float MyMath::Length(const Vector3& v) {
 	return result;
 }
 
+//平面と点の距離
 float MyMath::Distance(const Vector3& sphereCenter, const PlaneData& plane) {
 	float result;
 	result = Dot(plane.normal, sphereCenter) - plane.distance;
+	if (result < 0) {
+		return result * -1.0f;
+	}
 	return result;
 }
 

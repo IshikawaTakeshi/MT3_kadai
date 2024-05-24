@@ -13,13 +13,23 @@ Sphere::Sphere(Vector3 centerPos, float radius) {
 	centerPos_ = centerPos;
 	radius_ = radius;
 	worldMatrix_ = MatrixMath::MakeAffineMatrix({ 1.0f,1.0f,1.0f }, { 0.0f,0.0f,0.0f },centerPos_);
+	color_ = 0xffffffff;
 }
 
 Sphere::~Sphere() {
 }
 
-void Sphere::Update() {
+void Sphere::Update(const PlaneData& plane) {
+
+
 	worldMatrix_ = MatrixMath::MakeAffineMatrix({ 1.0f,1.0f,1.0f }, { 0.0f,0.0f,0.0f }, centerPos_);
+
+	plane;
+	if (IsCollision(plane) == true) {
+		color_ = 0xff0000ff;
+	} else {
+		color_ = 0xffffffff;
+	}
 
 #ifdef _DEBUG
 	ImGui::Begin("Window::Sphere");
@@ -29,7 +39,7 @@ void Sphere::Update() {
 #endif // _DEBUG
 }
 
-void Sphere::Draw(const Matrix4x4& viewProjectionMatrix, const Matrix4x4& viewportMatrix, uint32_t color) {
+void Sphere::Draw(const Matrix4x4& viewProjectionMatrix, const Matrix4x4& viewportMatrix) {
 	const uint32_t kSubdivision = 16;
 	const float kLonEvery = static_cast<float>(M_PI) / static_cast<float>(kSubdivision); // 経度分割1つ分の角度
 	const float kLatEvery = 2.0f * static_cast<float>(M_PI) / static_cast<float>(kSubdivision); // 緯度分割1つ分の角度
@@ -61,14 +71,14 @@ void Sphere::Draw(const Matrix4x4& viewProjectionMatrix, const Matrix4x4& viewpo
 				static_cast<int>(screenA.y),
 				static_cast<int>(screenB.x),
 				static_cast<int>(screenB.y),
-				color
+				color_
 			);
 			Novice::DrawLine(
 				static_cast<int>(screenA.x),
 				static_cast<int>(screenA.y),
 				static_cast<int>(screenC.x),
 				static_cast<int>(screenC.y),
-				color
+				color_
 			);
 		}
 	}

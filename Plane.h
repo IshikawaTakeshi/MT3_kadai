@@ -19,8 +19,9 @@ public:
 	//更新処理
 	void Update();
 	//描画処理
-	void Draw(const PlaneData& plane,const Matrix4x4& viewPrjection,
-		const Matrix4x4& viewport);
+	void Draw(const Matrix4x4& viewPrjection,const Matrix4x4& viewport);
+
+	PlaneData GetPlaneData() { return plane_; }
 
 private:
 
