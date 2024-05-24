@@ -34,7 +34,9 @@ void Camera::Update() {
 	//viewMatrix_ = MatrixMath::Inverse(worldMatrix_);
 	//
 
-	
+	worldMatrix_ = MatrixMath::MakeAffineMatrix({ 1.0f,1.0f,1.0f }, cameraRotate_, cameraTranslate_);
+	viewMatrix_ = MatrixMath::Inverse(worldMatrix_);
+
 #ifdef _DEBUG
 	ImGui::Begin("Window::Camera");
 	ImGui::DragFloat3("CameraTranslate",&cameraTranslate_.x, 0.01f);
