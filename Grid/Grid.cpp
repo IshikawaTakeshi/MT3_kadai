@@ -38,7 +38,19 @@ void Grid::Draw(const Matrix4x4& viewProjectionMatrix, const Matrix4x4& viewport
 			static_cast<int>(screenEndPos.y),
 			0xaaaaaaff
 		);
+
+		if (xIndex == 5) {
+			Novice::DrawLine(
+				static_cast<int>(screenStartPos.x),
+				static_cast<int>(screenStartPos.y),
+				static_cast<int>(screenEndPos.x),
+				static_cast<int>(screenEndPos.y),
+				0x000000ff
+			);
+		}
 	}
+
+
 
 	//Z線
 	for (uint32_t zIndex = 0; zIndex <= kSubDivision_; ++zIndex) {
@@ -55,5 +67,15 @@ void Grid::Draw(const Matrix4x4& viewProjectionMatrix, const Matrix4x4& viewport
 			static_cast<int>(screenEndPos.y),
 			0xaaaaaaff
 		);
+
+		if (zIndex == 5) {
+			Novice::DrawLine(
+				static_cast<int>(screenStartPos.x),
+				static_cast<int>(screenStartPos.y),
+				static_cast<int>(screenEndPos.x),
+				static_cast<int>(screenEndPos.y),
+				0x000000ff
+			);
+		}
 	}
 }
