@@ -10,14 +10,22 @@ Camera::Camera() {
 	cameraRotate_ = { 0.26f,0.0f,0.0f };
 	worldMatrix_ = MatrixMath::MakeAffineMatrix({ 1.0f,1.0f,1.0f }, cameraRotate_, cameraTranslate_);
 	viewMatrix_ = MatrixMath::Inverse(worldMatrix_);
+	projectionMatrix_ = MatrixMath::MakePerspectiveFovMatrix(0.45f, 1280.0f / 720.0f, 0.1f, 100.0f);
+	viewProjectionMatrix_ = MatrixMath::Multiply(viewMatrix_, projectionMatrix_);
+	viewportMatrix_ = MatrixMath::MakeViewportMatrix(0, 0, 1280.0f, 720.0f, 0.0f, 1.0f);
 }
 
 Camera::~Camera() {
 }
 
 void Camera::Update() {
+
+	//アフィン行列の更新
 	worldMatrix_ = MatrixMath::MakeAffineMatrix({ 1.0f,1.0f,1.0f }, cameraRotate_, cameraTranslate_);
+
 	viewMatrix_ = MatrixMath::Inverse(worldMatrix_);
+	//ビュープロジェクションの更新
+	viewProjectionMatrix_ = MatrixMath::Multiply(viewMatrix_, projectionMatrix_);
 
 #ifdef _DEBUG
 	ImGui::Begin("Window::Camera");

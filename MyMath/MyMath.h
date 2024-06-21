@@ -1,7 +1,7 @@
 ﻿#pragma once
 #include <Vector3.h>
-#include "Lines.h"
 
+class Segment;
 struct PlaneData;
 class MyMath {
 public:
@@ -44,7 +44,7 @@ public:
 	static Vector3 Project(const Vector3& v1, const Vector3& v2);
 
 	//最近接点
-	static Vector3 ClosestPoint(const Vector3& point, const Segment& segment);
+	static Vector3 ClosestPoint(const Vector3& point, Segment& segment);
 
 	//垂直なベクトルを求める関数
 	static Vector3 Perpendicular(const Vector3& vector);

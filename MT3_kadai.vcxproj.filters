@@ -68,6 +68,12 @@
     <ClCompile Include="Plane.cpp">
       <Filter>KamataEngine</Filter>
     </ClCompile>
+    <ClCompile Include="Segment.cpp">
+      <Filter>KamataEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\..\KamataEngine\DirectXGame\math\Vector3.cpp">
+      <Filter>KamataEngine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="C:\KamataEngine\DirectXGame\audio\Audio.h">
@@ -161,5 +167,6 @@
     </ClInclude>
     <ClInclude Include="Lines.h" />
     <ClInclude Include="Plane.h" />
+    <ClInclude Include="Segment.h" />
   </ItemGroup>
 </Project>

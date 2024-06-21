@@ -25,6 +25,7 @@ public:
 
 private:
 
+	//中心点
 	Vector3 centerPos_;
 	//平面
 	PlaneData plane_;
