@@ -37,8 +37,8 @@ private:
 	//ビューポート変換行列
 	Matrix4x4 viewportMatrix_;
 	//法線
-	Vector3 normal_;
+	//Vector3 normal_;
 	//ワールド原点との距離
-	float distance_;
+	//float distance_;
 };
 
