@@ -54,8 +54,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			aabb1->SetColor(0xffffffff);
 		}
 
-		ImGui::Begin("AABB");
+		ImGui::Begin("AABB1");
 		aabb1->UpdateImGui("aabb1");
+		ImGui::End();
+		ImGui::Begin("AABB2");
 		aabb2->UpdateImGui("aabb2");
 		ImGui::End();
 		
