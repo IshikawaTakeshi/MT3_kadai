@@ -6,8 +6,8 @@
 #endif // _DEBUG
 
 Camera::Camera() {
-	cameraTranslate_ = { 3.0f,1.9f,-4.49f };
-	cameraRotate_ = { 0.26f,-0.6f,0.0f };
+	cameraTranslate_ = { 0.0f,1.9f,-4.49f };
+	cameraRotate_ = { 0.26f,-0.0f,0.0f };
 	worldMatrix_ = MatrixMath::MakeAffineMatrix({ 1.0f,1.0f,1.0f }, cameraRotate_, cameraTranslate_);
 	viewMatrix_ = MatrixMath::Inverse(worldMatrix_);
 	projectionMatrix_ = MatrixMath::MakePerspectiveFovMatrix(0.45f, 1280.0f / 720.0f, 0.1f, 100.0f);

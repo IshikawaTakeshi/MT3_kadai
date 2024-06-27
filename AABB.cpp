@@ -14,7 +14,12 @@ void AABB::Initialize(Vector3 min, Vector3 max) {
 }
 
 void AABB::Update() {
-
+	min_.x = (std::min)(min_.x, max_.x);
+	max_.x = (std::max)(min_.x, max_.x);
+	min_.y = (std::min)(min_.y, max_.y);
+	max_.y = (std::max)(min_.y, max_.y);
+	min_.z = (std::min)(min_.z, max_.z);
+	max_.z = (std::max)(min_.z, max_.z);
 }
 
 void AABB::UpdateImGui(std::string name) {

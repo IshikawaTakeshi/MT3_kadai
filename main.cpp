@@ -23,7 +23,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	AABB* aabb1 = new AABB();
 	aabb1->Initialize({ -0.5f,-0.5f,-0.5f }, { 0.0f,0.0f,0.0f });
 	//Sphere
-	Sphere* sphere = new Sphere({0,0,0},1.0f);
+	Sphere* sphere = new Sphere({0.0f,1.0f,-1.0f},0.5f);
 
 
 	// キー入力結果を受け取る箱
