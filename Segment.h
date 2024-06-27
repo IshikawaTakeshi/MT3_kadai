@@ -4,6 +4,7 @@
 #include <cstdint>
 
 class Plane;
+class Triangle;
 class Segment {
 public:	
 
@@ -11,11 +12,13 @@ public:
 	~Segment() = default;
 
 	void Initialize();
-	void Update(Plane* plane);
+	void Update(Triangle* triangle);
 	void Draw(const Matrix4x4& viewProjectionMatrix, const Matrix4x4& viewportMatrix);
 
 	//線分と平面の当たり判定
-	bool IsCollision(Plane& plane);
+	bool IsCollision(Plane* plane);
+	//線分と三角形の当たり判定
+	bool IsCollision(Triangle* triangle);
 
 	Vector3 GetOrigin() { return origin_; }
 	Vector3 GetDiff() { return diff_; }

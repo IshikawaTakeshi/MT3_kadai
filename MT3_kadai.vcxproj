@@ -117,6 +117,7 @@ xcopy C:\KamataEngine\DirectXGame\Resources "$(OutDirFullPath)NoviceResources" /
     <ClCompile Include="C:\KamataEngine\DirectXGame\2d\ImGuiManager.cpp" />
     <ClCompile Include="C:\KamataEngine\Adapter\Novice.cpp" />
     <ClCompile Include="Camera\Camera.cpp" />
+    <ClCompile Include="Collision.cpp" />
     <ClCompile Include="Grid\Grid.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MyMath\MatrixMath.cpp" />
@@ -124,6 +125,7 @@ xcopy C:\KamataEngine\DirectXGame\Resources "$(OutDirFullPath)NoviceResources" /
     <ClCompile Include="Plane.cpp" />
     <ClCompile Include="Segment.cpp" />
     <ClCompile Include="Sphere.cpp" />
+    <ClCompile Include="Triangle.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="C:\KamataEngine\DirectXGame\base\StringUtility.h" />
@@ -154,6 +156,7 @@ xcopy C:\KamataEngine\DirectXGame\Resources "$(OutDirFullPath)NoviceResources" /
     <ClInclude Include="C:\KamataEngine\DirectXGame\scene\GameScene.h" />
     <ClInclude Include="C:\KamataEngine\Adapter\Novice.h" />
     <ClInclude Include="Camera\Camera.h" />
+    <ClInclude Include="Collision.h" />
     <ClInclude Include="Grid\Grid.h" />
     <ClInclude Include="Lines.h" />
     <ClInclude Include="MyMath\Matrix3x3.h" />
@@ -162,6 +165,7 @@ xcopy C:\KamataEngine\DirectXGame\Resources "$(OutDirFullPath)NoviceResources" /
     <ClInclude Include="Plane.h" />
     <ClInclude Include="Segment.h" />
     <ClInclude Include="Sphere.h" />
+    <ClInclude Include="Triangle.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

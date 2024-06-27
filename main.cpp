@@ -4,7 +4,7 @@
 #include "Grid/Grid.h"
 #include "Camera/Camera.h"
 #include "Segment.h"
-#include "Plane.h"
+#include "Triangle.h"
 
 
 
@@ -20,11 +20,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	Grid* grid = new Grid();
 	//カメラの生成
 	Camera* camera = new Camera();
-	//平面の生成
-	Plane* plane = new Plane();
 	//線分の生成
 	Segment* segment = new Segment();
 	segment->Initialize();
+	//三角形の生成
+	Triangle* triangle = new Triangle();
+	triangle->Initialize();
 
 	// キー入力結果を受け取る箱
 	char keys[256] = {0};
@@ -44,9 +45,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		///
 		
 		
-		grid->Update();
-		plane->Update();	
-		segment->Update(plane);
+		grid->Update();	
+		segment->Update(triangle);
+		triangle->Update();
 		camera->Update();
 		
 		///
@@ -60,8 +61,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		///
 	
 		grid->Draw(camera->GetViewProjectionMatrix(), camera->GetViewportMatrix());
-		plane->Draw(camera->GetViewProjectionMatrix(), camera->GetViewportMatrix());
 		segment->Draw(camera->GetViewProjectionMatrix(), camera->GetViewportMatrix());
+		triangle->Draw(camera->GetViewProjectionMatrix(), camera->GetViewportMatrix(),segment);
+
+
 
 		///
 		/// ↑描画処理ここまで
