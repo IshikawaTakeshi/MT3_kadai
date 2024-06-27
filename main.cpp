@@ -3,10 +3,8 @@
 #include "MyMath/MyMath.h"
 #include "Grid/Grid.h"
 #include "Camera/Camera.h"
-#include "Segment.h"
-#include "Triangle.h"
-
-
+#include "AABB.h"
+#include <imgui.h>
 
 const char kWindowTitle[] = "LE2C_03_イシカワタケシ_MT3_02_03";
 
@@ -20,12 +18,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	Grid* grid = new Grid();
 	//カメラの生成
 	Camera* camera = new Camera();
-	//線分の生成
-	Segment* segment = new Segment();
-	segment->Initialize();
-	//三角形の生成
-	Triangle* triangle = new Triangle();
-	triangle->Initialize();
+	//AABB1
+	AABB* aabb1 = new AABB();
+	aabb1->Initialize({ -0.5f,-0.5f,-0.5f }, { 0.0f,0.0f,0.0f });
+	//AABB2
+	AABB* aabb2 = new AABB();
+	aabb2->Initialize({ 0.2f,0.2f,0.2f }, { 1.0f,1.0f,1.0f });
 
 	// キー入力結果を受け取る箱
 	char keys[256] = {0};
@@ -44,11 +42,22 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		/// ↓更新処理ここから
 		///
 		
-		
+		aabb1->Update();
+		aabb2->Update();
 		grid->Update();	
-		segment->Update(triangle);
-		triangle->Update();
 		camera->Update();
+	
+
+		if (aabb1->IsCollision(*aabb2) == true) {
+			aabb1->SetColor(0xff0000ff);
+		} else {
+			aabb1->SetColor(0xffffffff);
+		}
+
+		ImGui::Begin("AABB");
+		aabb1->UpdateImGui("aabb1");
+		aabb2->UpdateImGui("aabb2");
+		ImGui::End();
 		
 		///
 		/// ↑更新処理ここまで
@@ -60,12 +69,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		/// ↓描画処理ここから
 		///
 	
+		aabb1->Draw(camera->GetViewProjectionMatrix(), camera->GetViewportMatrix());
+		aabb2->Draw(camera->GetViewProjectionMatrix(), camera->GetViewportMatrix());
 		grid->Draw(camera->GetViewProjectionMatrix(), camera->GetViewportMatrix());
-		segment->Draw(camera->GetViewProjectionMatrix(), camera->GetViewportMatrix());
-		triangle->Draw(camera->GetViewProjectionMatrix(), camera->GetViewportMatrix(),segment);
-
-
-
+		
 		///
 		/// ↑描画処理ここまで
 		///
