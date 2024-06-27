@@ -4,6 +4,7 @@
 #include "Grid/Grid.h"
 #include "Camera/Camera.h"
 #include "AABB.h"
+#include "Sphere.h"
 #include <imgui.h>
 
 const char kWindowTitle[] = "LE2C_03_イシカワタケシ_MT3_02_03";
@@ -18,12 +19,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	Grid* grid = new Grid();
 	//カメラの生成
 	Camera* camera = new Camera();
-	//AABB1
+	//AABB
 	AABB* aabb1 = new AABB();
 	aabb1->Initialize({ -0.5f,-0.5f,-0.5f }, { 0.0f,0.0f,0.0f });
-	//AABB2
-	AABB* aabb2 = new AABB();
-	aabb2->Initialize({ 0.2f,0.2f,0.2f }, { 1.0f,1.0f,1.0f });
+	//Sphere
+	Sphere* sphere = new Sphere({0,0,0},1.0f);
+
 
 	// キー入力結果を受け取る箱
 	char keys[256] = {0};
@@ -43,12 +44,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		///
 		
 		aabb1->Update();
-		aabb2->Update();
+		sphere->Update();
 		grid->Update();	
 		camera->Update();
 	
 
-		if (aabb1->IsCollision(*aabb2) == true) {
+		if (aabb1->IsCollision(sphere) == true) {
 			aabb1->SetColor(0xff0000ff);
 		} else {
 			aabb1->SetColor(0xffffffff);
@@ -56,9 +57,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 		ImGui::Begin("AABB1");
 		aabb1->UpdateImGui("aabb1");
-		ImGui::End();
-		ImGui::Begin("AABB2");
-		aabb2->UpdateImGui("aabb2");
 		ImGui::End();
 		
 		///
@@ -72,7 +70,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		///
 	
 		aabb1->Draw(camera->GetViewProjectionMatrix(), camera->GetViewportMatrix());
-		aabb2->Draw(camera->GetViewProjectionMatrix(), camera->GetViewportMatrix());
+		sphere->Draw(camera->GetViewProjectionMatrix(), camera->GetViewportMatrix());
 		grid->Draw(camera->GetViewProjectionMatrix(), camera->GetViewportMatrix());
 		
 		///

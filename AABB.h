@@ -3,6 +3,7 @@
 #include "Matrix4x4.h"
 #include <string>
 
+class Sphere;
 class AABB {
 public:
 
@@ -27,9 +28,14 @@ public:
 	void Draw(const Matrix4x4& viewProjectionMatrix, const Matrix4x4& viewportMatrix);
 
 	/// <summary>
-	/// 当たり判定
+	/// AABB同士の当たり判定
 	/// </summary>
 	bool IsCollision(const AABB& aabb2);
+
+	/// <summary>
+	/// 球体との当たり判定
+	/// </summary>
+	bool IsCollision(Sphere* sphere);
 
 	void SetColor(int color) { color_ = color; }
 

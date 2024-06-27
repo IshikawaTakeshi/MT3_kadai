@@ -19,17 +19,10 @@ Sphere::Sphere(Vector3 centerPos, float radius) {
 Sphere::~Sphere() {
 }
 
-void Sphere::Update(const PlaneData& plane) {
+void Sphere::Update() {
 
 
 	worldMatrix_ = MatrixMath::MakeAffineMatrix({ 1.0f,1.0f,1.0f }, { 0.0f,0.0f,0.0f }, centerPos_);
-
-	plane;
-	if (IsCollision(plane) == true) {
-		color_ = 0xff0000ff;
-	} else {
-		color_ = 0xffffffff;
-	}
 
 #ifdef _DEBUG
 	ImGui::Begin("Window::Sphere");

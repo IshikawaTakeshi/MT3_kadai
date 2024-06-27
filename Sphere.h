@@ -9,12 +9,15 @@ class Sphere {
 public:
 	Sphere(Vector3 centerPos,float radius);
 	~Sphere();
-	void Update(const PlaneData& plane);
+	void Update();
 	void Draw(
 		const Matrix4x4& viewProjectionMatrix, const Matrix4x4& viewportMatrix
 	);
 
 	bool IsCollision(const PlaneData& plane);
+
+	Vector3 GetCenterPos() { return centerPos_; }
+	float GetRadius() { return radius_; }
 	void SetColor(uint32_t color) { color_ = color; }
 
 private:

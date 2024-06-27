@@ -1,5 +1,7 @@
 #include "AABB.h"
 #include "MyMath/MatrixMath.h"
+#include "MyMath/MyMath.h"
+#include "Sphere.h"
 #include "Novice.h"
 #include <algorithm>
 #include <imgui.h>
@@ -12,16 +14,6 @@ void AABB::Initialize(Vector3 min, Vector3 max) {
 }
 
 void AABB::Update() {
-
-	//min_.x = (std::min)(min_.x, max_.x);
-	//min_.x = (std::max)(min_.x, max_.x);
-	//min_.y = (std::min)(min_.y, max_.y);
-	//min_.y = (std::max)(min_.y, max_.y);
-	//min_.z = (std::min)(min_.z, max_.z);
-	//min_.z = (std::max)(min_.z, max_.z);
-
-	
-	
 
 }
 
@@ -160,5 +152,22 @@ bool AABB::IsCollision(const AABB& aabb2) {
 
 		return true;
 	}
+	return false;
+}
+
+bool AABB::IsCollision(Sphere* sphere) {
+	//最近接点を求める
+	Vector3 clossestPoint{
+		std::clamp(sphere->GetCenterPos().x,min_.x,max_.x),
+		std::clamp(sphere->GetCenterPos().y,min_.y,max_.y),
+		std::clamp(sphere->GetCenterPos().z,min_.z,max_.z)
+	};
+	//最近接点と球の中心との距離を求める
+	float distance = MyMath::Length(clossestPoint - sphere->GetCenterPos());
+	//距離が半径よりも小さければ衝突
+	if (distance <= sphere->GetRadius()) {
+		return true;
+	}
+
 	return false;
 }
