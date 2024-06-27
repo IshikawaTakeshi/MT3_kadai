@@ -27,6 +27,8 @@ public:
 	//ゲッター
 	Vector3 GetVertices(int index) { return vertices_[index]; }
 	Vector3 GetNormal() { return normal_; }
+	float getDistance() { return distance_; }
+
 private:
 
 	//ワールド行列

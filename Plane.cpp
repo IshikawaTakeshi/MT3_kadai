@@ -36,7 +36,7 @@ void Plane::Update() {
 #endif // _DEBUG
 }
 
-void Plane::Draw(const Matrix4x4& viewPrjection,const Matrix4x4& viewport) {
+void Plane::Draw(const Matrix4x4& viewProjection,const Matrix4x4& viewport) {
 
 	
 	Vector3 perpendiculars[4];
@@ -49,7 +49,7 @@ void Plane::Draw(const Matrix4x4& viewPrjection,const Matrix4x4& viewport) {
 	for (int32_t index = 0; index < 4; index++) {
 		Vector3 extend = MyMath::Multiply(2.0f, perpendiculars[index]);
 		Vector3 point = MyMath::Add(centerPos_, extend);
-		points[index] = MatrixMath::Transform(MatrixMath::Transform(point, viewPrjection), viewport);
+		points[index] = MatrixMath::Transform(MatrixMath::Transform(point, viewProjection), viewport);
 	}
 
 	Novice::DrawLine(
