@@ -29,6 +29,8 @@ public:
 	Vector3 GetNormal() { return normal_; }
 	float getDistance() { return distance_; }
 
+	void SetDistance(float distance) { distance_ = distance; }
+
 private:
 
 	//ワールド行列

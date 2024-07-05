@@ -8,7 +8,7 @@
 
 void Triangle::Initialize() {
 	normal_ = { 0.0f,0.0f,-1.0f };
-	distance_ = 1.0f;
+	distance_ = -1.0f;
 	centerPos_ = MyMath::Multiply(distance_, normal_);
 	vertices_[0] = { -1.0f,0.0f,0.0f };
 	vertices_[1] = { 0.0f,1.0f,0.0f };
@@ -18,6 +18,11 @@ void Triangle::Initialize() {
 
 void Triangle::Update() {
 
+	//法線の算出
+	normal_ = MyMath::Normalize(MyMath::Cross(vertices_[1] - vertices_[0], vertices_[2] - vertices_[0]));
+
+	//distanceの算出
+	distance_ = MyMath::Dot(normal_, vertices_[0]);
 
 	//ワールド行列の更新
 	worldMatrix_ = MatrixMath::MakeAffineMatrix({ 1.0f,1.0f,1.0f }, { 0.0f,0.0f,0.0f }, centerPos_);
