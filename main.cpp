@@ -8,7 +8,7 @@
 
 
 
-const char kWindowTitle[] = "LE2C_03_イシカワタケシ_MT3_02_03";
+const char kWindowTitle[] = "LE2C_03_イシカワタケシ_MT3_02_04";
 
 // Windowsアプリでのエントリーポイント(main関数)
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
