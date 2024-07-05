@@ -3,8 +3,7 @@
 #include "MyMath/MyMath.h"
 #include "Grid/Grid.h"
 #include "Camera/Camera.h"
-#include "Segment.h"
-#include "Triangle.h"
+#include "Sphere.h"
 
 #include <imgui.h>
 
@@ -16,16 +15,45 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	// ライブラリの初期化
 	Novice::Initialize(kWindowTitle, 1280, 720);
 
-	Vector3 a{ 0.2f,1.0f,0.0f };
-	Vector3 b{ 2.4f,3.1f,1.2f };
-	Vector3 c = a + b;
-	Vector3 d = a - b;
-	Vector3 e = a * 2.4f;
-	Vector3 rotate{ 0.4f,1.43f,-0.8f };
-	Matrix4x4 rotateXMatrix = MatrixMath::MakeRotateXMatrix(rotate.x);
-	Matrix4x4 rotateYMatrix = MatrixMath::MakeRotateYMatrix(rotate.y);
-	Matrix4x4 rotateZMatrix = MatrixMath::MakeRotateZMatrix(rotate.z);
-	Matrix4x4 rotateMatrix = rotateXMatrix * rotateYMatrix * rotateZMatrix;
+	Vector3 translates[3] = {
+		{0.2f,1.0f,0.0f},
+		{0.4f,0.0f,0.0f},
+		{0.3f,0.0f,0.0f},
+	};
+
+	Vector3 rotates[3] = {
+		{0.0f,0.0f,-6.8f},
+		{0.0f,0.0f,-1.4f},
+		{0.0f,0.0f,0.0f},
+	};
+
+	Vector3 scales[3] = {
+		{1.0f,1.0f,1.0f},
+		{1.0f,1.0f,1.0f},
+		{1.0f,1.0f,1.0f},
+	};
+
+	float radius = 0.3f;
+
+	// カメラの初期化
+	Camera* camera = new Camera();
+	// グリッドの初期化
+	Grid* grid = new Grid();
+
+	//スフィア(肩)の初期化
+	Sphere* sphereShoulder = new Sphere(translates[0],radius);
+	sphereShoulder->SetRotation(rotates[0]);
+	sphereShoulder->SetScale(scales[0]);
+	//スフィア(肘)の初期化
+	Sphere* sphereElbow = new Sphere(translates[1], radius);
+	sphereElbow->SetRotation(rotates[1]);
+	sphereElbow->SetScale(scales[1]);
+	//スフィア(手首)の初期化
+	Sphere* sphereWrist = new Sphere(translates[2], radius);
+	sphereWrist->SetRotation(rotates[2]);
+	sphereWrist->SetScale(scales[2]);
+
+
 
 	// キー入力結果を受け取る箱
 	char keys[256] = {0};
@@ -44,17 +72,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		/// ↓更新処理ここから
 		///
 		
+		sphereShoulder->Update();
+		sphereElbow->Update();
+		sphereShoulder->Update();
+		
+		sphereElbow->SetWorldMatrix()
+
 		ImGui::Begin("Window");
-		ImGui::Text("c:%f,%f,%f", c.x, c.y, c.z);
-		ImGui::Text("d:%f,%f,%f", d.x, d.y, d.z);
-		ImGui::Text("e:%f,%f,%f", e.x, e.y, e.z);
-		ImGui::Text(
-			"matrix: \n%f, %f, %f, %f\n%f, %f, %f, %f\n%f, %f, %f, %f\n%f, %f, %f, %f\n",
-			rotateMatrix.m[0][0], rotateMatrix.m[0][1], rotateMatrix.m[0][2], rotateMatrix.m[0][3],
-			rotateMatrix.m[1][0], rotateMatrix.m[1][1], rotateMatrix.m[1][2], rotateMatrix.m[1][3],
-			rotateMatrix.m[2][0], rotateMatrix.m[2][1], rotateMatrix.m[2][2], rotateMatrix.m[2][3],
-			rotateMatrix.m[3][0], rotateMatrix.m[3][1], rotateMatrix.m[3][2], rotateMatrix.m[3][3]
-		);
+
 		ImGui::End();
 
 		///
