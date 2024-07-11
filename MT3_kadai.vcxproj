@@ -121,6 +121,7 @@ xcopy C:\KamataEngine\DirectXGame\Resources "$(OutDirFullPath)NoviceResources" /
     <ClCompile Include="Collision.cpp" />
     <ClCompile Include="Grid\Grid.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="MyMath\Easing.cpp" />
     <ClCompile Include="MyMath\MatrixMath.cpp" />
     <ClCompile Include="MyMath\MyMath.cpp" />
     <ClCompile Include="Plane.cpp" />
@@ -160,6 +161,7 @@ xcopy C:\KamataEngine\DirectXGame\Resources "$(OutDirFullPath)NoviceResources" /
     <ClInclude Include="Collision.h" />
     <ClInclude Include="Grid\Grid.h" />
     <ClInclude Include="Lines.h" />
+    <ClInclude Include="MyMath\Easing.h" />
     <ClInclude Include="MyMath\Matrix3x3.h" />
     <ClInclude Include="MyMath\MatrixMath.h" />
     <ClInclude Include="MyMath\MyMath.h" />

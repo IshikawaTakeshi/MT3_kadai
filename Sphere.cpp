@@ -19,24 +19,9 @@ Sphere::Sphere(Vector3 centerPos, float radius) {
 Sphere::~Sphere() {
 }
 
-void Sphere::Update(const PlaneData& plane) {
-
+void Sphere::Update() {
 
 	worldMatrix_ = MatrixMath::MakeAffineMatrix({ 1.0f,1.0f,1.0f }, { 0.0f,0.0f,0.0f }, centerPos_);
-
-	plane;
-	if (IsCollision(plane) == true) {
-		color_ = 0xff0000ff;
-	} else {
-		color_ = 0xffffffff;
-	}
-
-#ifdef _DEBUG
-	ImGui::Begin("Window::Sphere");
-	ImGui::DragFloat3("SphereTranslate", &centerPos_.x, 0.01f);
-	ImGui::DragFloat("SphereRadius", &radius_, 0.01f);
-	ImGui::End();
-#endif // _DEBUG
 }
 
 void Sphere::Draw(const Matrix4x4& viewProjectionMatrix, const Matrix4x4& viewportMatrix) {

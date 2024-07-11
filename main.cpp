@@ -4,11 +4,12 @@
 #include "Grid/Grid.h"
 #include "Camera/Camera.h"
 #include "Segment.h"
-#include "Triangle.h"
-
+#include "Sphere.h"
+#include "Grid/Grid.h"
+#include "MyMath/Easing.h"
 #include <imgui.h>
 
-const char kWindowTitle[] = "LE2C_03_イシカワタケシ_MT3_03_02";
+const char kWindowTitle[] = "LE2C_03_イシカワタケシ_MT3_03_00";
 
 // Windowsアプリでのエントリーポイント(main関数)
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
@@ -16,16 +17,24 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	// ライブラリの初期化
 	Novice::Initialize(kWindowTitle, 1280, 720);
 
-	Vector3 a{ 0.2f,1.0f,0.0f };
-	Vector3 b{ 2.4f,3.1f,1.2f };
-	Vector3 c = a + b;
-	Vector3 d = a - b;
-	Vector3 e = a * 2.4f;
-	Vector3 rotate{ 0.4f,1.43f,-0.8f };
-	Matrix4x4 rotateXMatrix = MatrixMath::MakeRotateXMatrix(rotate.x);
-	Matrix4x4 rotateYMatrix = MatrixMath::MakeRotateYMatrix(rotate.y);
-	Matrix4x4 rotateZMatrix = MatrixMath::MakeRotateZMatrix(rotate.z);
-	Matrix4x4 rotateMatrix = rotateXMatrix * rotateYMatrix * rotateZMatrix;
+	Vector3 controlPoint[3] = {
+		{-0.8f,0.58f,1.0f},
+		{1.76f,1.0f,-0.3f},
+		{0.94f,-0.7f,2.3f}
+	};
+
+	float radius = 0.05f;
+
+	// カメラの生成
+	Camera* camera = new Camera();
+	// グリッドの生成
+	Grid* grid = new Grid();
+	//制御点を描画するための球体の生成
+	Sphere* sphereP0 = new Sphere(controlPoint[0], radius);
+	Sphere* sphereP1 = new Sphere(controlPoint[1], radius);
+	Sphere* sphereP2 = new Sphere(controlPoint[2], radius);
+
+	
 
 	// キー入力結果を受け取る箱
 	char keys[256] = {0};
@@ -44,17 +53,43 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		/// ↓更新処理ここから
 		///
 		
-		ImGui::Begin("Window");
-		ImGui::Text("c:%f,%f,%f", c.x, c.y, c.z);
-		ImGui::Text("d:%f,%f,%f", d.x, d.y, d.z);
-		ImGui::Text("e:%f,%f,%f", e.x, e.y, e.z);
-		ImGui::Text(
-			"matrix: \n%f, %f, %f, %f\n%f, %f, %f, %f\n%f, %f, %f, %f\n%f, %f, %f, %f\n",
-			rotateMatrix.m[0][0], rotateMatrix.m[0][1], rotateMatrix.m[0][2], rotateMatrix.m[0][3],
-			rotateMatrix.m[1][0], rotateMatrix.m[1][1], rotateMatrix.m[1][2], rotateMatrix.m[1][3],
-			rotateMatrix.m[2][0], rotateMatrix.m[2][1], rotateMatrix.m[2][2], rotateMatrix.m[2][3],
-			rotateMatrix.m[3][0], rotateMatrix.m[3][1], rotateMatrix.m[3][2], rotateMatrix.m[3][3]
-		);
+		camera->Update();
+		grid->Update();
+		sphereP0->Update();
+		sphereP1->Update();
+		sphereP2->Update();
+
+		ImGui::Begin("Debug");
+
+		//sphereP0の数値を表示
+		ImGui::Text("Sphere.P0");
+		Vector3 p0Transform = sphereP0->GetTransform();
+		ImGui::DragFloat3("Translate", &p0Transform.x, 0.01f);
+		sphereP0->SetTransform(p0Transform);
+
+		float p0Radius = sphereP0->GetRadius();
+		ImGui::DragFloat("Scale", &p0Radius, 0.01f);
+		sphereP0->SetRadius(p0Radius);
+
+		//sphereP1の数値を表示
+		ImGui::Text("Sphere.P1");
+		Vector3 p1Transform = sphereP1->GetTransform();
+		ImGui::DragFloat3("Translate##2", &p1Transform.x, 0.01f);
+		sphereP1->SetTransform(p1Transform);
+
+		float p1Radius = sphereP1->GetRadius();
+		ImGui::DragFloat("Scale", &p1Radius, 0.01f);
+		sphereP1->SetRadius(p1Radius);
+
+		//sphereP2の数値を表示
+		ImGui::Text("Sphere.P2");
+		Vector3 p2Transform = sphereP2->GetTransform();
+		ImGui::DragFloat3("Translate##3", &p2Transform.x, 0.01f);
+		sphereP2->SetTransform(p2Transform);
+
+		float p2Radius = sphereP2->GetRadius();
+		ImGui::DragFloat("Scale", &p2Radius, 0.01f);
+		sphereP2->SetRadius(p2Radius);
 		ImGui::End();
 
 		///
@@ -67,6 +102,18 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		/// ↓描画処理ここから
 		///
 	
+		grid->Draw(camera->GetViewProjectionMatrix(), camera->GetViewportMatrix());
+		sphereP0->Draw(camera->GetViewProjectionMatrix(), camera->GetViewportMatrix());
+		sphereP1->Draw(camera->GetViewProjectionMatrix(), camera->GetViewportMatrix());
+		sphereP2->Draw(camera->GetViewProjectionMatrix(), camera->GetViewportMatrix());
+
+		//ベジエ曲線描画
+		Easing::DrawBezier(
+			{ sphereP0->GetWorldMatrix().m[3][0], sphereP0->GetWorldMatrix().m[3][1], sphereP0->GetWorldMatrix().m[3][2] },
+			{ sphereP1->GetWorldMatrix().m[3][0], sphereP1->GetWorldMatrix().m[3][1], sphereP1->GetWorldMatrix().m[3][2] },
+			{ sphereP2->GetWorldMatrix().m[3][0], sphereP2->GetWorldMatrix().m[3][1], sphereP2->GetWorldMatrix().m[3][2] },
+			 camera->GetViewProjectionMatrix(), camera->GetViewportMatrix(), 0x00ff00ff);
+
 		///
 		/// ↑描画処理ここまで
 		///
