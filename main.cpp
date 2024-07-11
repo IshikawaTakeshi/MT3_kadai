@@ -124,12 +124,17 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 		//Catmull-rom曲線描画
 		Easing::DrawCatmullRom(
-			{ sphereP0->GetWorldMatrix().m[3][0], sphereP0->GetWorldMatrix().m[3][1], sphereP0->GetWorldMatrix().m[3][2] },
-			{ sphereP1->GetWorldMatrix().m[3][0], sphereP1->GetWorldMatrix().m[3][1], sphereP1->GetWorldMatrix().m[3][2] },
-			{ sphereP2->GetWorldMatrix().m[3][0], sphereP2->GetWorldMatrix().m[3][1], sphereP2->GetWorldMatrix().m[3][2] },
-			{ sphereP3->GetWorldMatrix().m[3][0], sphereP3->GetWorldMatrix().m[3][1], sphereP3->GetWorldMatrix().m[3][2] },
-			 camera->GetViewProjectionMatrix(), camera->GetViewportMatrix(), 0x00ff00ff);
+			sphereP0->GetTransform(), sphereP0->GetTransform(), sphereP1->GetTransform(), sphereP2->GetTransform(),
+			camera->GetViewProjectionMatrix(), camera->GetViewportMatrix(), 0x00ff00ff);
 
+		Easing::DrawCatmullRom(
+			sphereP0->GetTransform(), sphereP1->GetTransform(), sphereP2->GetTransform(), sphereP3->GetTransform(),
+			 camera->GetViewProjectionMatrix(), camera->GetViewportMatrix(), 0x00ff00ff);
+		
+		Easing::DrawCatmullRom(
+			sphereP1->GetTransform(), sphereP2->GetTransform(), sphereP3->GetTransform(), sphereP3->GetTransform(),
+			camera->GetViewProjectionMatrix(), camera->GetViewportMatrix(), 0x00ff00ff);
+		
 		///
 		/// ↑描画処理ここまで
 		///

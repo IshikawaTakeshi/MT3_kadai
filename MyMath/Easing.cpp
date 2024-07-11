@@ -62,28 +62,20 @@ void Easing::DrawCatmullRom(
 		//媒介変数の初期化
 		float t0 = i / static_cast<float>(division);
 		float t1 = (i + 1) / static_cast<float>(division);
-		//float t2 = (i + 2) / static_cast<float>(division);
-		
+				
 		//catmull-rom曲線上の点を求める
-		Vector3 catmullRomP0p1 = CatmullRom(controlPoint0, controlPoint0, controlPoint1, controlPoint2, t0);
+		Vector3 catmullRomP0p1 = CatmullRom(controlPoint0, controlPoint1, controlPoint2, controlPoint3, t0);
 		Vector3 catmullRomP1p2 = CatmullRom(controlPoint0, controlPoint1, controlPoint2, controlPoint3, t1);
-		//Vector3 catmullRomP2p3 = CatmullRom(controlPoint1, controlPoint2, controlPoint3, controlPoint3, t2);
-
-
+		
 		//それぞれの点をスクリーン座標に変換
-		Vector3 screenPosP0 = MatrixMath::Transform(MatrixMath::Transform(controlPoint0, viewProjectionMatrix), viewportMatrix);
-		Vector3 screenPosP1 = MatrixMath::Transform(MatrixMath::Transform(controlPoint1, viewProjectionMatrix), viewportMatrix);
 		Vector3 screenPosP0p1 = MatrixMath::Transform(MatrixMath::Transform(catmullRomP0p1, viewProjectionMatrix), viewportMatrix);
 		Vector3 screenPosP1p2 = MatrixMath::Transform(MatrixMath::Transform(catmullRomP1p2, viewProjectionMatrix), viewportMatrix);
-		//Vector3 screenPosP2p3 = MatrixMath::Transform(MatrixMath::Transform(catmullRomP2p3, viewProjectionMatrix), viewportMatrix);
-
+		
 		//描画
 		Novice::DrawLine(
 			static_cast<int>(screenPosP0p1.x), static_cast<int>(screenPosP0p1.y),
 			static_cast<int>(screenPosP1p2.x), static_cast<int>(screenPosP1p2.y),
 			color
 		);
-	
-
 	}
 }
