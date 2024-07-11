@@ -45,7 +45,7 @@ void Sphere::Draw(const Matrix4x4& viewProjectionMatrix, const Matrix4x4& viewpo
 			Vector3 screenA, screenB, screenC;
 			
 			//スクリーン座標に変換
-			a = MyMath::Multiply( radius_,{ std::cosf(lat) * std::cosf(lon),std::sinf(lat),std::cosf(lat) * std::sinf(lon) });
+			a = MyMath::Multiply(radius_, { std::cosf(lat) * std::cosf(lon),std::sinf(lat),std::cosf(lat) * std::sinf(lon) });
 			b = MyMath::Multiply(radius_, { std::cosf(lat + kLatEvery) * std::cosf(lon),std::sinf(lat + kLatEvery), std::cosf(lat + kLatEvery) * std::sinf(lon) });
 			c = MyMath::Multiply(radius_, { std::cosf(lat) * std::cosf(lon + kLonEvery),std::sinf(lat),std::cosf(lat) * std::sinf(lon + kLonEvery) });
 			ndcA = MatrixMath::Transform(a, MatrixMath::Multiply(worldMatrix_, viewProjectionMatrix));
