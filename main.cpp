@@ -17,10 +17,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	// ライブラリの初期化
 	Novice::Initialize(kWindowTitle, 1280, 720);
 
-	Vector3 controlPoint[3] = {
+	Vector3 controlPoint[4] = {
 		{-0.8f,0.58f,1.0f},
 		{1.76f,1.0f,-0.3f},
-		{0.94f,-0.7f,2.3f}
+		{0.94f,-0.7f,2.3f},
+		{-0.53f,-0.26f,-0.15f}
 	};
 
 	float radius = 0.05f;
@@ -33,7 +34,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	Sphere* sphereP0 = new Sphere(controlPoint[0], radius);
 	Sphere* sphereP1 = new Sphere(controlPoint[1], radius);
 	Sphere* sphereP2 = new Sphere(controlPoint[2], radius);
-
+	Sphere* sphereP3 = new Sphere(controlPoint[3], radius);
 	
 
 	// キー入力結果を受け取る箱
@@ -58,10 +59,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		sphereP0->Update();
 		sphereP1->Update();
 		sphereP2->Update();
+		sphereP3->Update();
 
+#pragma region imgui
 		ImGui::Begin("Debug");
-
-		//sphereP0の数値を表示
+		//========== sphereP0の数値を表示 ==========//
 		ImGui::Text("Sphere.P0");
 		Vector3 p0Transform = sphereP0->GetTransform();
 		ImGui::DragFloat3("Translate", &p0Transform.x, 0.01f);
@@ -71,7 +73,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		ImGui::DragFloat("Scale", &p0Radius, 0.01f);
 		sphereP0->SetRadius(p0Radius);
 
-		//sphereP1の数値を表示
+		//========== sphereP1の数値を表示 ==========//
 		ImGui::Text("Sphere.P1");
 		Vector3 p1Transform = sphereP1->GetTransform();
 		ImGui::DragFloat3("Translate##2", &p1Transform.x, 0.01f);
@@ -81,7 +83,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		ImGui::DragFloat("Scale", &p1Radius, 0.01f);
 		sphereP1->SetRadius(p1Radius);
 
-		//sphereP2の数値を表示
+		//=========== sphereP2の数値を表示 ==========//
 		ImGui::Text("Sphere.P2");
 		Vector3 p2Transform = sphereP2->GetTransform();
 		ImGui::DragFloat3("Translate##3", &p2Transform.x, 0.01f);
@@ -90,7 +92,19 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		float p2Radius = sphereP2->GetRadius();
 		ImGui::DragFloat("Scale", &p2Radius, 0.01f);
 		sphereP2->SetRadius(p2Radius);
+
+		//========== sphereP3の数値を表示 ==========//
+		ImGui::Text("Sphere.P3");
+		Vector3 p3Transform = sphereP3->GetTransform();
+		ImGui::DragFloat3("Translate##4", &p3Transform.x, 0.01f);
+		sphereP3->SetTransform(p3Transform);
+
+		float p3Radius = sphereP3->GetRadius();
+		ImGui::DragFloat("Scale", &p3Radius, 0.01f);
+		sphereP3->SetRadius(p3Radius);
+
 		ImGui::End();
+#pragma endregion
 
 		///
 		/// ↑更新処理ここまで
@@ -106,12 +120,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		sphereP0->Draw(camera->GetViewProjectionMatrix(), camera->GetViewportMatrix());
 		sphereP1->Draw(camera->GetViewProjectionMatrix(), camera->GetViewportMatrix());
 		sphereP2->Draw(camera->GetViewProjectionMatrix(), camera->GetViewportMatrix());
+		sphereP3->Draw(camera->GetViewProjectionMatrix(), camera->GetViewportMatrix());
 
-		//ベジエ曲線描画
-		Easing::DrawBezier(
+		//Catmull-rom曲線描画
+		Easing::DrawCatmullRom(
 			{ sphereP0->GetWorldMatrix().m[3][0], sphereP0->GetWorldMatrix().m[3][1], sphereP0->GetWorldMatrix().m[3][2] },
 			{ sphereP1->GetWorldMatrix().m[3][0], sphereP1->GetWorldMatrix().m[3][1], sphereP1->GetWorldMatrix().m[3][2] },
 			{ sphereP2->GetWorldMatrix().m[3][0], sphereP2->GetWorldMatrix().m[3][1], sphereP2->GetWorldMatrix().m[3][2] },
+			{ sphereP3->GetWorldMatrix().m[3][0], sphereP3->GetWorldMatrix().m[3][1], sphereP3->GetWorldMatrix().m[3][2] },
 			 camera->GetViewProjectionMatrix(), camera->GetViewportMatrix(), 0x00ff00ff);
 
 		///

@@ -29,7 +29,6 @@ void Easing::DrawBezier(const Vector3& controlPoint0, const Vector3& controlPoin
 		Vector3 bezier1 = Bezier(controlPoint0, controlPoint1, controlPoint2, t1);
 
 		//それぞれの点をスクリーン座標に変換
-		// ビューポート変換
 		Vector3 screenPos0 = MatrixMath::Transform(MatrixMath::Transform(bezier0, viewProjectionMatrix), viewportMatrix);
 		Vector3 screenPos1 = MatrixMath::Transform(MatrixMath::Transform(bezier1, viewProjectionMatrix), viewportMatrix);
 
@@ -40,4 +39,51 @@ void Easing::DrawBezier(const Vector3& controlPoint0, const Vector3& controlPoin
 			color
 		);
 	}	
+}
+
+Vector3 Easing::CatmullRom(const Vector3& controlPoint0, const Vector3& controlPoint1, const Vector3& controlPoint2, const Vector3& controlPoint3, float easedT) {
+	
+	Vector3 result = ((-controlPoint0 + 3.0f * controlPoint1 - 3.0f * controlPoint2 + controlPoint3) * powf(easedT,3) +
+		(2.0f * controlPoint0 - 5.0f * controlPoint1 + 4.0f * controlPoint2 - controlPoint3) * powf(easedT, 2) +
+		(-controlPoint0 + controlPoint2) * easedT + 2.0f * controlPoint1) / 2.0f;
+
+	return result;
+}
+
+void Easing::DrawCatmullRom(
+	const Vector3& controlPoint0, const Vector3& controlPoint1, const Vector3& controlPoint2, const Vector3& controlPoint3,
+	const Matrix4x4& viewProjectionMatrix, const Matrix4x4& viewportMatrix, uint32_t color) {
+
+	//分割数
+	float division = 32;
+
+	for (int i = 0; i < division; i++) {
+
+		//媒介変数の初期化
+		float t0 = i / static_cast<float>(division);
+		float t1 = (i + 1) / static_cast<float>(division);
+		//float t2 = (i + 2) / static_cast<float>(division);
+		
+		//catmull-rom曲線上の点を求める
+		Vector3 catmullRomP0p1 = CatmullRom(controlPoint0, controlPoint0, controlPoint1, controlPoint2, t0);
+		Vector3 catmullRomP1p2 = CatmullRom(controlPoint0, controlPoint1, controlPoint2, controlPoint3, t1);
+		//Vector3 catmullRomP2p3 = CatmullRom(controlPoint1, controlPoint2, controlPoint3, controlPoint3, t2);
+
+
+		//それぞれの点をスクリーン座標に変換
+		Vector3 screenPosP0 = MatrixMath::Transform(MatrixMath::Transform(controlPoint0, viewProjectionMatrix), viewportMatrix);
+		Vector3 screenPosP1 = MatrixMath::Transform(MatrixMath::Transform(controlPoint1, viewProjectionMatrix), viewportMatrix);
+		Vector3 screenPosP0p1 = MatrixMath::Transform(MatrixMath::Transform(catmullRomP0p1, viewProjectionMatrix), viewportMatrix);
+		Vector3 screenPosP1p2 = MatrixMath::Transform(MatrixMath::Transform(catmullRomP1p2, viewProjectionMatrix), viewportMatrix);
+		//Vector3 screenPosP2p3 = MatrixMath::Transform(MatrixMath::Transform(catmullRomP2p3, viewProjectionMatrix), viewportMatrix);
+
+		//描画
+		Novice::DrawLine(
+			static_cast<int>(screenPosP0p1.x), static_cast<int>(screenPosP0p1.y),
+			static_cast<int>(screenPosP1p2.x), static_cast<int>(screenPosP1p2.y),
+			color
+		);
+	
+
+	}
 }

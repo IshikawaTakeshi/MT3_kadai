@@ -30,6 +30,7 @@ public:
 		return -(cosf(std::numbers::pi_v<float> * x) - 1.0f) / 2.0f;
 	}
 
+	//===============ベジエ曲線====================//
 	static Vector3 Bezier(const Vector3& controlPoint0, const Vector3& controlPoint1, const Vector3& controlPoint2, float easedT);
 
 	/// <summary>
@@ -43,6 +44,23 @@ public:
 	/// <param name="color"></param>
 	static void DrawBezier(
 		const Vector3& controlPoint0, const Vector3& controlPoint1, const Vector3& controlPoint2,
+		const Matrix4x4& viewProjectionMatrix, const Matrix4x4& viewportMatrix, uint32_t color);
+
+	//===============Catmull-Rom補間====================//
+	static Vector3 CatmullRom(const Vector3& controlPoint0, const Vector3& controlPoint1, const Vector3& controlPoint2, const Vector3& controlPoint3, float easedT);
+
+	/// <summary>
+	/// catmull-rom曲線の描画
+	/// </summary>
+	/// <param name="controlPoint0"></param>
+	/// <param name="controlPoint1"></param>
+	/// <param name="controlPoint2"></param>
+	/// <param name="controlPoint3"></param>
+	/// <param name="viewProjectionMatrix"></param>
+	/// <param name="viewportMatrix"></param>
+	/// <param name="color"></param>
+	static void DrawCatmullRom(
+		const Vector3& controlPoint0, const Vector3& controlPoint1, const Vector3& controlPoint2, const Vector3& controlPoint3,
 		const Matrix4x4& viewProjectionMatrix, const Matrix4x4& viewportMatrix, uint32_t color);
 };
 
