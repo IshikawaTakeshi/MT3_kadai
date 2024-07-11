@@ -7,7 +7,7 @@
 
 #include <imgui.h>
 
-const char kWindowTitle[] = "LE2C_03_イシカワタケシ_MT3_03_02";
+const char kWindowTitle[] = "LE2C_03_イシカワタケシ_MT3_03_01";
 
 // Windowsアプリでのエントリーポイント(main関数)
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
@@ -33,7 +33,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		{1.0f,1.0f,1.0f},
 	};
 
-	float radius = 0.3f;
+	float radius = 0.05f;
 
 	// カメラの初期化
 	Camera* camera = new Camera();
@@ -44,16 +44,17 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	Sphere* sphereShoulder = new Sphere(translates[0],radius);
 	sphereShoulder->SetRotation(rotates[0]);
 	sphereShoulder->SetScale(scales[0]);
+	sphereShoulder->SetColor(0xff0000ff);
 	//スフィア(肘)の初期化
 	Sphere* sphereElbow = new Sphere(translates[1], radius);
 	sphereElbow->SetRotation(rotates[1]);
 	sphereElbow->SetScale(scales[1]);
+	sphereElbow->SetColor(0x00ff00ff);
 	//スフィア(手首)の初期化
 	Sphere* sphereWrist = new Sphere(translates[2], radius);
 	sphereWrist->SetRotation(rotates[2]);
 	sphereWrist->SetScale(scales[2]);
-
-
+	sphereWrist->SetColor(0x0000ffff);
 
 	// キー入力結果を受け取る箱
 	char keys[256] = {0};
@@ -72,13 +73,64 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		/// ↓更新処理ここから
 		///
 		
+
+		grid->Update();
+		camera->Update();
 		sphereShoulder->Update();
 		sphereElbow->Update();
-		sphereShoulder->Update();
+		sphereWrist->Update();
 		
-		sphereElbow->SetWorldMatrix()
+		
+		sphereElbow->SetWorldMatrix(sphereElbow->GetWorldMatrix() * sphereShoulder->GetWorldMatrix());
+		sphereWrist->SetWorldMatrix(sphereWrist->GetWorldMatrix() * sphereElbow->GetWorldMatrix());
 
-		ImGui::Begin("Window");
+
+		ImGui::Begin("Debug");
+#pragma region 肩の更新
+		ImGui::Text("Sphere.Shoulder");
+		Vector3 shoulderTransform = sphereShoulder->GetTransform();
+		ImGui::DragFloat3("Translate", &shoulderTransform.x, 0.01f);
+		sphereShoulder->SetTransform(shoulderTransform);
+
+		Vector3 shoulderRotation = sphereShoulder->GetRotation();
+		ImGui::DragFloat3("Rotation", &shoulderRotation.x, 0.01f);
+		sphereShoulder->SetRotation(shoulderRotation);
+
+		float shoulderRadius = sphereShoulder->GetRadius();
+		ImGui::DragFloat("Scale", &shoulderRadius, 0.01f);
+		sphereShoulder->SetRadius(shoulderRadius);
+#pragma endregion
+
+#pragma region 肘の更新
+		ImGui::Text("Sphere.Elbow");
+		Vector3 elbowTransform = sphereElbow->GetTransform();
+		ImGui::DragFloat3("Translate##2", &elbowTransform.x, 0.01f);
+		sphereElbow->SetTransform(elbowTransform);
+
+		Vector3 elbowRotation = sphereElbow->GetRotation();
+		ImGui::DragFloat3("Rotation##2", &elbowRotation.x, 0.01f);
+		sphereElbow->SetRotation(elbowRotation);
+
+		float elbowRadius = sphereElbow->GetRadius();
+		ImGui::DragFloat("Scale##2", &elbowRadius, 0.01f);
+		sphereElbow->SetRadius(elbowRadius);
+
+#pragma endregion
+
+#pragma region 手首の更新
+		ImGui::Text("Sphere.Wrist");
+		Vector3 wristTransform = sphereWrist->GetTransform();
+		ImGui::DragFloat3("Translate##3", &wristTransform.x, 0.01f);
+		sphereWrist->SetTransform(wristTransform);
+
+		Vector3 wristRotation = sphereWrist->GetRotation();
+		ImGui::DragFloat3("Rotation##3", &wristRotation.x, 0.01f);
+		sphereWrist->SetRotation(wristRotation);
+
+		float wristRadius = sphereWrist->GetRadius();
+		ImGui::DragFloat("Scale##3", &wristRadius, 0.01f);
+		sphereWrist->SetRadius(wristRadius);
+#pragma endregion
 
 		ImGui::End();
 
@@ -86,12 +138,39 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		/// ↑更新処理ここまで
 		///
 		
-
-
+		
 		///
 		/// ↓描画処理ここから
 		///
 	
+		grid->Draw(camera->GetViewProjectionMatrix(), camera->GetViewportMatrix());
+		sphereShoulder->Draw(camera->GetViewProjectionMatrix(), camera->GetViewportMatrix());
+		sphereElbow->Draw(camera->GetViewProjectionMatrix(), camera->GetViewportMatrix());
+		sphereWrist->Draw(camera->GetViewProjectionMatrix(), camera->GetViewportMatrix());
+		
+		Vector3 ndcShoulder = MatrixMath::Transform(sphereShoulder->GetTransform(), sphereShoulder->GetWorldMatrix() * camera->GetViewProjectionMatrix());
+		Vector3 ndcElbow = MatrixMath::Transform(sphereElbow->GetTransform(), sphereElbow->GetWorldMatrix() * camera->GetViewProjectionMatrix());
+		Vector3 ndcWrist = MatrixMath::Transform(sphereWrist->GetTransform(), sphereWrist->GetWorldMatrix() * camera->GetViewProjectionMatrix());
+
+		Vector3 screenShoulder = MatrixMath::Transform(ndcShoulder,camera->GetViewportMatrix());
+		Vector3 screenElbow = MatrixMath::Transform(ndcElbow, camera->GetViewportMatrix());
+		Vector3 screenWrist = MatrixMath::Transform(ndcWrist,camera->GetViewportMatrix());
+
+		Novice::DrawLine(
+			static_cast<int>(screenShoulder.x),
+			static_cast<int>(screenShoulder.y),
+			static_cast<int>(screenElbow.x),
+			static_cast<int>(screenElbow.y),
+			0xffffffff
+		);
+		Novice::DrawLine(
+			static_cast<int>(screenElbow.x),
+			static_cast<int>(screenElbow.y),
+			static_cast<int>(screenWrist.x),
+			static_cast<int>(screenWrist.y),
+			0xffffffff
+		);
+
 		///
 		/// ↑描画処理ここまで
 		///

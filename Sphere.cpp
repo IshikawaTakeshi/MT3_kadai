@@ -26,12 +26,7 @@ void Sphere::Update() {
 
 	worldMatrix_ = MatrixMath::MakeAffineMatrix(scale_,rotation_, centerPos_);
 
-#ifdef _DEBUG
-	ImGui::Begin("Window::Sphere");
-	ImGui::DragFloat3("SphereTranslate", &centerPos_.x, 0.01f);
-	ImGui::DragFloat("SphereRadius", &radius_, 0.01f);
-	ImGui::End();
-#endif // _DEBUG
+
 }
 
 void Sphere::Draw(const Matrix4x4& viewProjectionMatrix, const Matrix4x4& viewportMatrix) {
@@ -86,3 +81,4 @@ bool Sphere::IsCollision(const PlaneData& plane) {
 	}
 	return false;
 }
+

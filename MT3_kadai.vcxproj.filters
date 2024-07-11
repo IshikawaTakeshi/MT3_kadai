@@ -23,7 +23,7 @@
     <Filter Include="Grid">
       <UniqueIdentifier>{3910493e-2eed-4b4c-86ab-9d471bc15efd}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Shapes">
+    <Filter Include="Sphere">
       <UniqueIdentifier>{e08a6963-89b5-44ed-9560-4dc8bb8f305e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -63,7 +63,7 @@
       <Filter>Grid</Filter>
     </ClCompile>
     <ClCompile Include="Sphere.cpp">
-      <Filter>Shapes</Filter>
+      <Filter>Sphere</Filter>
     </ClCompile>
     <ClCompile Include="Plane.cpp">
       <Filter>KamataEngine</Filter>
@@ -78,6 +78,9 @@
       <Filter>KamataEngine</Filter>
     </ClCompile>
     <ClCompile Include="Collision.cpp">
+      <Filter>KamataEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\..\KamataEngine\DirectXGame\math\Matrix4x4.cpp">
       <Filter>KamataEngine</Filter>
     </ClCompile>
   </ItemGroup>
@@ -169,7 +172,7 @@
       <Filter>Grid</Filter>
     </ClInclude>
     <ClInclude Include="Sphere.h">
-      <Filter>Shapes</Filter>
+      <Filter>Sphere</Filter>
     </ClInclude>
     <ClInclude Include="Lines.h" />
     <ClInclude Include="Plane.h" />
