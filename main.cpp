@@ -148,9 +148,24 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		sphereElbow->Draw(camera->GetViewProjectionMatrix(), camera->GetViewportMatrix());
 		sphereWrist->Draw(camera->GetViewProjectionMatrix(), camera->GetViewportMatrix());
 		
-		Vector3 screenShoulder = MatrixMath::Transform(MatrixMath::Transform(shoulderTransform, camera->GetViewProjectionMatrix()),camera->GetViewportMatrix());
-		Vector3 screenElbow = MatrixMath::Transform(MatrixMath::Transform(shoulderTransform, camera->GetViewProjectionMatrix()), camera->GetViewportMatrix());
-		Vector3 screenWrist = MatrixMath::Transform(MatrixMath::Transform(wristTransform, camera->GetViewProjectionMatrix()),camera->GetViewportMatrix());
+		Vector3 screenShoulder = MatrixMath::Transform(MatrixMath::Transform(
+			{ sphereShoulder->GetWorldMatrix().m[3][0],
+			  sphereShoulder->GetWorldMatrix().m[3][1],
+			  sphereShoulder->GetWorldMatrix().m[3][2] },
+			camera->GetViewProjectionMatrix()), camera->GetViewportMatrix());
+
+		Vector3 screenElbow = MatrixMath::Transform(MatrixMath::Transform(
+			{ sphereElbow->GetWorldMatrix().m[3][0],
+			  sphereElbow->GetWorldMatrix().m[3][1],
+			  sphereElbow->GetWorldMatrix().m[3][2] },
+			camera->GetViewProjectionMatrix()), camera->GetViewportMatrix());
+
+
+		Vector3 screenWrist = MatrixMath::Transform(MatrixMath::Transform(
+			{ sphereWrist->GetWorldMatrix().m[3][0],
+			  sphereWrist->GetWorldMatrix().m[3][1],
+			  sphereWrist->GetWorldMatrix().m[3][2] },
+			camera->GetViewProjectionMatrix()),camera->GetViewportMatrix());
 
 		Novice::DrawLine(
 			static_cast<int>(screenShoulder.x),
