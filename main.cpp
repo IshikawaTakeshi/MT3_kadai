@@ -6,10 +6,12 @@
 #include "Segment.h"
 #include "Sphere.h"
 #include "Grid/Grid.h"
-#include "MyMath/Easing.h"
-#include "Spring.h"
-#include "Ball.h"
+
 #include <imgui.h>
+
+//フレーム間の経過時間(デルタタイム)
+static inline const float kDeltaTime = 1.0f / 60.0f;
+
 
 const char kWindowTitle[] = "LE2C_03_イシカワタケシ_MT3_03_00";
 
@@ -19,18 +21,18 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	// ライブラリの初期化
 	Novice::Initialize(kWindowTitle, 1280, 720);
 
-	//バネの生成
-	Spring spring = {
-		{0.0f,0.0f,0.0f},
-		1.0f,
-		100.0f,
-		2.0f,
-		MatrixMath::MakeIdentity4x4()
-	};
+	//円周上の半径
+	float radius = 0.8f;
+	//円周上の角速度
+	float anglerVelocity = 3.14f;
+	//円周上の角度
+	float angle = 0.0f;
 
-	//ボールの生成
-	Ball* ball = new Ball();
-	ball->Initialize({ 1.2f,0.0f,0.0f },0.05f);
+
+	//円周上を周回する球体の生成
+	Sphere* sphere = new Sphere();
+	sphere->Initialize({ 0.0f,0.0f,0.0f }, 0.05f);
+
 	//更新処理の実行フラグ
 	bool isUpdate = false;
 
@@ -55,21 +57,37 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		///
 		/// ↓更新処理ここから
 		///
-		
+
+		// カメラの更新
 		camera->Update();
+		// グリッドの更新
 		grid->Update();
-		spring.Update();
-		if (isUpdate == true) {
-			ball->Update(spring);
+
 		
+		
+		
+		if (isUpdate == true) {
+			angle += anglerVelocity * kDeltaTime;
+			Vector3 acceleration = {
+				-anglerVelocity * anglerVelocity * radius * std::cosf(angle),
+				-anglerVelocity * anglerVelocity * radius * std::sinf(angle),
+				0.0f
+			};
+			sphere->SetCenterPos(
+				{
+					radius * std::cosf(angle),
+					radius * std::sinf(angle),
+					0.0f
+				}
+			);
+
+			sphere->Update();	
 		}
 	
 #pragma region imgui
 		ImGui::Begin("Debug");
-		ImGui::Checkbox("BallUpdate", &isUpdate);
+		ImGui::Checkbox("Update", &isUpdate);
 
-		ImGui::Text("Ball");
-		ImGui::Text("CenterPos: %f,%f,%f", ball->GetCenterPos().x, ball->GetCenterPos().y, ball->GetCenterPos().z);
 		ImGui::End();
 #pragma endregion
 
@@ -84,9 +102,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		///
 	
 		grid->Draw(camera->GetViewProjectionMatrix(), camera->GetViewportMatrix());
-		ball->Draw(camera->GetViewProjectionMatrix(), camera->GetViewportMatrix());
-		spring.Draw(camera->GetViewProjectionMatrix(), camera->GetViewportMatrix(),ball->GetCenterPos());
-		
+		sphere->Draw(camera->GetViewProjectionMatrix(), camera->GetViewportMatrix());
+
 		///
 		/// ↑描画処理ここまで
 		///

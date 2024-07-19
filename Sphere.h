@@ -52,7 +52,7 @@ public:
 	virtual const float& GetRadius() { return radius_; }
 
 	//setter
-	void SetTransform(Vector3 transform) { centerPos_ = transform; }
+	void SetCenterPos(Vector3 transform) { centerPos_ = transform; }
 	void SetColor(uint32_t color) { color_ = color; }
 	void SetRadius(float radius) { radius_ = radius; }
 	void SetWorldMatrix(Matrix4x4 worldMatrix) { worldMatrix_ = worldMatrix; }
