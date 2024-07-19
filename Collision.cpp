@@ -2,6 +2,7 @@
 #include "Plane.h"
 #include "Segment.h"
 #include "Triangle.h"
+#include "Ball.h"
 #include "MyMath/MyMath.h"
 
 bool Collision::Segment2PlaneIsCollision(Segment* segment, Plane* plane) {
@@ -52,4 +53,13 @@ bool Collision::Segment2TriangleIsCollision(Segment* segment, Triangle* triangle
 	}
 
 	return false;
+}
+
+bool Collision::Ball2PlaneIsCollision(Ball* ball, Plane* plane, float deltaTime) {
+
+	ball->SetAcceleration({ 0.0f,-9.8f,0.0f });
+	ball->SetVelocity(ball->GetVelocity() + ball->GetAcceleration() * deltaTime);
+	ball->SetCenterPos(ball->GetCenterPos() + ball->GetVelocity() * deltaTime);
+
+	
 }

@@ -128,3 +128,9 @@ Vector3 MyMath::Perpendicular(const Vector3& vector) {
 	}
 	return { 0.0f,-vector.z,vector.y };
 }
+
+Vector3 MyMath::Reflect(const Vector3& incident, const Vector3& normal) {
+	
+	Vector3 result = incident - Multiply(2.0f * Dot(incident, normal), normal);
+	return result;
+}

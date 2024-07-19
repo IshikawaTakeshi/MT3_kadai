@@ -49,6 +49,8 @@ public:
 	//垂直なベクトルを求める関数
 	static Vector3 Perpendicular(const Vector3& vector);
 
+	static Vector3 Reflect(const Vector3& incident, const Vector3& normal);
+
 public:
 	
 };
