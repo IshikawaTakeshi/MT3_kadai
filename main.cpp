@@ -6,7 +6,7 @@
 #include "Segment.h"
 #include "Sphere.h"
 #include "Grid/Grid.h"
-#include "Pendulum.h"
+#include "ConicalPendulum.h"
 #include <imgui.h>
 
 //フレーム間の経過時間(デルタタイム)
@@ -21,7 +21,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	// ライブラリの初期化
 	Novice::Initialize(kWindowTitle, 1280, 720);
 
-	Pendulum pendulum{
+	ConicalPendulum conicalPendulum{
 		{0.0f,1.0f,0.0f},
 		0.8f,
 		0.7f,
@@ -66,17 +66,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		// ペンデュラムの更新
 		//pendulum.Update();
 		if (isUpdate == true) {
-			pendulum.anglerAcceleration = -(9.8f / pendulum.length) * std::sinf(pendulum.angle);
-			pendulum.anglerVelocity += pendulum.anglerAcceleration * kDeltaTime;
-			pendulum.angle += pendulum.anglerVelocity * kDeltaTime;
-
+			
+			conicalPendulum.Update(kDeltaTime);
 			sphere->SetCenterPos({
-				pendulum.anchorPos.x + std::sinf(pendulum.angle) * pendulum.length,
-				pendulum.anchorPos.y - std::cosf(pendulum.angle) * pendulum.length,
-				pendulum.anchorPos.z
+				conicalPendulum.anchorPos.x + std::cosf(conicalPendulum.angle) * conicalPendulum.radius,
+				conicalPendulum.anchorPos.y - conicalPendulum.height,
+				conicalPendulum.anchorPos.z - std::sinf(conicalPendulum.angle) * conicalPendulum.radius
 				}
 			);
-
 			sphere->Update();
 		}
 
@@ -99,7 +96,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 		grid->Draw(camera->GetViewProjectionMatrix(), camera->GetViewportMatrix());
 		sphere->Draw(camera->GetViewProjectionMatrix(), camera->GetViewportMatrix());
-		pendulum.Draw(camera->GetViewProjectionMatrix(), camera->GetViewportMatrix(), sphere->GetCenterPos());
+		conicalPendulum.Draw(camera->GetViewProjectionMatrix(), camera->GetViewportMatrix(), sphere->GetCenterPos());
 
 		///
 		/// ↑描画処理ここまで

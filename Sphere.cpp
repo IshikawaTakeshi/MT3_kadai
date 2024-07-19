@@ -17,7 +17,7 @@ void Sphere::Initialize(Vector3 centerPos, float radius) {
 	centerPos_ = centerPos;
 	radius_ = radius;
 	worldMatrix_ = MatrixMath::MakeAffineMatrix({ 1.0f,1.0f,1.0f }, { 0.0f,0.0f,0.0f }, centerPos_);
-	color_ = 0xffffffff;
+	color_ = 0xff0000ff;
 }
 
 void Sphere::Update() {
