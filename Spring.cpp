@@ -10,7 +10,7 @@ void Spring::Update() {
 void Spring::Draw(const Matrix4x4& viewProjectionMatrix, const Matrix4x4& viewportMatrix, const Vector3& diff) {
 
 	Vector3 ndcAnchorPos = MatrixMath::Transform(anchorPos, worldMatrix * viewProjectionMatrix);
-	Vector3 ndcDiffPos = MatrixMath::Transform(diff, worldMatrix * viewProjectionMatrix);
+	Vector3 ndcDiffPos = MatrixMath::Transform(diff, viewProjectionMatrix);
 
 	Vector3 screenAnchorPos = MatrixMath::Transform(ndcAnchorPos, viewportMatrix);
 	Vector3 screenDiffPos = MatrixMath::Transform(ndcDiffPos, viewportMatrix);

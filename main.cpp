@@ -21,8 +21,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	//バネの生成
 	Spring spring = {
-		{0.0f,0.0f,0.0f},
-		1.0f,
+		{0.0f,1.0f,0.0f},
+		0.7f,
 		100.0f,
 		2.0f,
 		MatrixMath::MakeIdentity4x4()
@@ -30,7 +30,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	//ボールの生成
 	Ball* ball = new Ball();
-	ball->Initialize({ 1.2f,0.0f,0.0f },0.05f);
+	ball->Initialize({ 0.8f,0.2f,0.0f },0.05f);
 	//更新処理の実行フラグ
 	bool isUpdate = false;
 

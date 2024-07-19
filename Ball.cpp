@@ -33,7 +33,11 @@ void Ball::Update(const Spring& spring) {
 		Vector3 restoringForce = -spring.stiffness * displacement;
 		//減衰抵抗を計算
 		Vector3 dampingForce = -spring.dampingCoefficient * velocity_;
-		Vector3 force = restoringForce + dampingForce;
+		// 重力加速度を表すベクトル（下向きに9.8）
+		Vector3 gravityForce = { 0.0f, -9.8f * mass_, 0.0f };
+		// 減衰抵抗と重力を加味して、物体にかかる力を計算
+		Vector3 force = restoringForce + dampingForce + gravityForce;
+		//加速度を計算
 		acceleration_ = force / mass_;
 	}
 

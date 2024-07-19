@@ -35,6 +35,8 @@ private:
 
 	//フレーム間の経過時間(デルタタイム)
 	static inline const float kDeltaTime_ = 1.0f / 60.0f;
+	//重力加速度
+	static inline const Vector3 kGravity_ = { 0.0f,-9.8f,0.0f };
 
 	//速度
 	Vector3 velocity_; 
