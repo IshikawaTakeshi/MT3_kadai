@@ -61,5 +61,11 @@ bool Collision::Ball2PlaneIsCollision(Ball* ball, Plane* plane, float deltaTime)
 	ball->SetVelocity(ball->GetVelocity() + ball->GetAcceleration() * deltaTime);
 	ball->SetCenterPos(ball->GetCenterPos() + ball->GetVelocity() * deltaTime);
 
-	
+	if (ball->IsCollision(plane->GetPlaneData()) == true) {
+		Vector3 reflected = MyMath::Reflect(ball->GetVelocity(), plane->GetPlaneData().normal);
+		Vector3 projectNormal = MyMath::Project(reflected, plane->GetPlaneData().normal);
+		Vector3 movingDirection = reflected - projectNormal;
+
+		ball->SetVelocity(projectNormal * e + movingDirection);
+	}
 }
