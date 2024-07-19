@@ -64,15 +64,15 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		// グリッドの更新
 		grid->Update();
 		// ペンデュラムの更新
-		pendulum.Update();
+		//pendulum.Update();
 		if (isUpdate == true) {
 			pendulum.anglerAcceleration = -(9.8f / pendulum.length) * std::sinf(pendulum.angle);
 			pendulum.anglerVelocity += pendulum.anglerAcceleration * kDeltaTime;
 			pendulum.angle += pendulum.anglerVelocity * kDeltaTime;
 
 			sphere->SetCenterPos({
-				pendulum.anchorPos.x + std::cosf(pendulum.angle) * pendulum.length,
-				pendulum.anchorPos.y - std::sinf(pendulum.angle) * pendulum.length,
+				pendulum.anchorPos.x + std::sinf(pendulum.angle) * pendulum.length,
+				pendulum.anchorPos.y - std::cosf(pendulum.angle) * pendulum.length,
 				pendulum.anchorPos.z
 				}
 			);
