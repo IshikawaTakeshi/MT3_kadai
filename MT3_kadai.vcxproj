@@ -110,6 +110,7 @@ xcopy C:\KamataEngine\DirectXGame\Resources "$(OutDirFullPath)NoviceResources" /
   <ItemGroup>
     <ClCompile Include="..\..\..\..\..\..\..\..\KamataEngine\DirectXGame\math\Matrix4x4.cpp" />
     <ClCompile Include="..\..\..\..\..\..\..\..\KamataEngine\DirectXGame\math\Vector3.cpp" />
+    <ClCompile Include="Ball.cpp" />
     <ClCompile Include="C:\KamataEngine\DirectXGame\base\StringUtility.cpp" />
     <ClCompile Include="C:\KamataEngine\DirectXGame\base\DirectXCommon.cpp" />
     <ClCompile Include="C:\KamataEngine\DirectXGame\base\WinApp.cpp" />
@@ -127,9 +128,11 @@ xcopy C:\KamataEngine\DirectXGame\Resources "$(OutDirFullPath)NoviceResources" /
     <ClCompile Include="Plane.cpp" />
     <ClCompile Include="Segment.cpp" />
     <ClCompile Include="Sphere.cpp" />
+    <ClCompile Include="Spring.cpp" />
     <ClCompile Include="Triangle.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Ball.h" />
     <ClInclude Include="C:\KamataEngine\DirectXGame\base\StringUtility.h" />
     <ClInclude Include="C:\KamataEngine\DirectXGame\math\Matrix4x4.h" />
     <ClInclude Include="C:\KamataEngine\DirectXGame\math\Vector2.h" />
@@ -168,6 +171,7 @@ xcopy C:\KamataEngine\DirectXGame\Resources "$(OutDirFullPath)NoviceResources" /
     <ClInclude Include="Plane.h" />
     <ClInclude Include="Segment.h" />
     <ClInclude Include="Sphere.h" />
+    <ClInclude Include="Spring.h" />
     <ClInclude Include="Triangle.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
