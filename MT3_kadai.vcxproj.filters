@@ -80,6 +80,21 @@
     <ClCompile Include="Collision.cpp">
       <Filter>KamataEngine</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\..\KamataEngine\DirectXGame\math\Matrix4x4.cpp">
+      <Filter>KamataEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="Ball.cpp">
+      <Filter>KamataEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="MyMath\Easing.cpp">
+      <Filter>KamataEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="Spring.cpp">
+      <Filter>KamataEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="Pendulum.cpp">
+      <Filter>KamataEngine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="C:\KamataEngine\DirectXGame\audio\Audio.h">
@@ -176,5 +191,9 @@
     <ClInclude Include="Segment.h" />
     <ClInclude Include="Triangle.h" />
     <ClInclude Include="Collision.h" />
+    <ClInclude Include="Ball.h" />
+    <ClInclude Include="MyMath\Easing.h" />
+    <ClInclude Include="Spring.h" />
+    <ClInclude Include="Pendulum.h" />
   </ItemGroup>
 </Project>

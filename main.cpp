@@ -6,7 +6,7 @@
 #include "Segment.h"
 #include "Sphere.h"
 #include "Grid/Grid.h"
-
+#include "Pendulum.h"
 #include <imgui.h>
 
 //フレーム間の経過時間(デルタタイム)
@@ -21,13 +21,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	// ライブラリの初期化
 	Novice::Initialize(kWindowTitle, 1280, 720);
 
-	//円周上の半径
-	float radius = 0.8f;
-	//円周上の角速度
-	float anglerVelocity = 3.14f;
-	//円周上の角度
-	float angle = 0.0f;
+	Pendulum pendulum{
 
+		{0.0f,1.0f,0.0f},
+		0.8f,
+		0.7f,
+		0.0f,
+		0.0f
+	};
 
 	//円周上を周回する球体の生成
 	Sphere* sphere = new Sphere();
@@ -67,20 +68,18 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		
 		
 		if (isUpdate == true) {
-			angle += anglerVelocity * kDeltaTime;
-			Vector3 acceleration = {
-				-anglerVelocity * anglerVelocity * radius * std::cosf(angle),
-				-anglerVelocity * anglerVelocity * radius * std::sinf(angle),
-				0.0f
-			};
+			pendulum.angleAcceleration = -(9.8f / pendulum.length) * std::sinf(pendulum.angle);
+			pendulum.anglerVelocity += pendulum.angleAcceleration * kDeltaTime;
+			pendulum.angle += pendulum.anglerVelocity * kDeltaTime;
+
 			sphere->SetCenterPos(
 				{
-					radius * std::cosf(angle),
-					radius * std::sinf(angle),
-					0.0f
+					pendulum.length * std::sinf(pendulum.angle),
+					-pendulum.length * std::cosf(pendulum.angle),
+					pendulum.anchorPos.z
 				}
 			);
-
+			pendulum.Update();
 			sphere->Update();	
 		}
 	
@@ -102,6 +101,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		///
 	
 		grid->Draw(camera->GetViewProjectionMatrix(), camera->GetViewportMatrix());
+		
+		pendulum.Draw(camera->GetViewProjectionMatrix(), camera->GetViewportMatrix(), sphere->GetCenterPos());
 		sphere->Draw(camera->GetViewProjectionMatrix(), camera->GetViewportMatrix());
 
 		///
