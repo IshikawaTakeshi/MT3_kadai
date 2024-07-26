@@ -18,7 +18,7 @@ public:
 	/// <summary>
 	/// 更新処理
 	/// </summary>
-	void Update(const Spring& spring);
+	void Update();
 
 	void UpdateImGui();
 

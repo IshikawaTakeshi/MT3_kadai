@@ -23,6 +23,10 @@ public:
 
 	PlaneData GetPlaneData() { return plane_; }
 
+	void SetNormal(const Vector3& normal) { plane_.normal = normal; }
+
+	void SetDistance(float distance) { plane_.distance = distance; }
+
 private:
 
 	//中心点

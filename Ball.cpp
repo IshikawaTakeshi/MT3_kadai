@@ -15,29 +15,13 @@ void Ball::Initialize(Vector3 centerPos, float radius) {
 	radius_ = radius;
 	worldMatrix_ = MatrixMath::MakeIdentity4x4();
 	velocity_ = { 0.0f,0.0f,0.0f };
-	acceleration_ = { 0.0f,0.0f,0.0f };
+	acceleration_ = { 0.0f,9.8f,0.0f };
 	color_ = 0x0000ffff;
 	mass_ = 2.0f;
 }
 
-void Ball::Update(const Spring& spring) {
+void Ball::Update() {
 
-	Vector3 diff = centerPos_ - spring.anchorPos;
-	float diffLength = MyMath::Length(diff);
-
-	if (diffLength != 0.0f) {
-
-		Vector3 direction = MyMath::Normalize(diff);
-		Vector3 restPosition = spring.anchorPos + direction * spring.naturalLength;
-		Vector3 displacement = diffLength * (centerPos_ - restPosition);
-		Vector3 restoringForce = -spring.stiffness * displacement;
-		//減衰抵抗を計算
-		Vector3 dampingForce = -spring.dampingCoefficient * velocity_;
-		Vector3 force = restoringForce + dampingForce;
-		acceleration_ = force / mass_;
-	}
-
-	//加速度も速度もどちらも秒を基準とした値である
 	//デルタタイムの適用
 	velocity_ += acceleration_ * kDeltaTime_;
 	centerPos_ += velocity_ * kDeltaTime_;

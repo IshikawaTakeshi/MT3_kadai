@@ -55,7 +55,10 @@ bool Collision::Segment2TriangleIsCollision(Segment* segment, Triangle* triangle
 	return false;
 }
 
-bool Collision::Ball2PlaneIsCollision(Ball* ball, Plane* plane, float deltaTime) {
+void Collision::Ball2PlaneIsCollision(Ball* ball, Plane* plane, float deltaTime) {
+
+	//反発係数
+	float e = 0.8f;
 
 	ball->SetAcceleration({ 0.0f,-9.8f,0.0f });
 	ball->SetVelocity(ball->GetVelocity() + ball->GetAcceleration() * deltaTime);

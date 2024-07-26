@@ -5,15 +5,17 @@
 #include "Camera/Camera.h"
 #include "Segment.h"
 #include "Sphere.h"
+#include "Ball.h"
 #include "Grid/Grid.h"
-#include "ConicalPendulum.h"
+#include "Plane.h"
+#include "Collision.h"
 #include <imgui.h>
 
 //フレーム間の経過時間(デルタタイム)
 static inline const float kDeltaTime = 1.0f / 60.0f;
 
 
-const char kWindowTitle[] = "LE2C_03_イシカワタケシ_MT3_03_00";
+const char kWindowTitle[] = "LE2C_03_イシカワタケシ_MT3_04_04";
 
 // Windowsアプリでのエントリーポイント(main関数)
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
@@ -21,19 +23,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	// ライブラリの初期化
 	Novice::Initialize(kWindowTitle, 1280, 720);
 
-	ConicalPendulum conicalPendulum{
-		{0.0f,1.0f,0.0f},
-		0.8f,
-		0.7f,
-		0.0f,
-		0.0f,
-		MatrixMath::MakeIdentity4x4()
-	};
-
+	Plane* plane = new Plane();
+	plane->SetNormal(MyMath::Normalize({-0.2f,0.9f,-0.3f}));
+	plane->SetDistance(0.0f);
 	//球体の生成
-	Sphere* sphere = new Sphere();
-	sphere->Initialize({ 0.0f,0.0f,0.0f }, 0.05f);
-
+	Ball* ball = new Ball();
+	ball->Initialize({ 0.8f,1.2f,0.3f }, 0.05f);
+	ball->SetMass(2.0f);
+	ball->SetColor(WHITE);
 	//更新処理の実行フラグ
 	bool isUpdate = false;
 
@@ -63,18 +60,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		camera->Update();
 		// グリッドの更新
 		grid->Update();
+
+		plane->Update();
 		// ペンデュラムの更新
 		//pendulum.Update();
 		if (isUpdate == true) {
 			
-			conicalPendulum.Update(kDeltaTime);
-			sphere->SetCenterPos({
-				conicalPendulum.anchorPos.x + std::cosf(conicalPendulum.angle) * conicalPendulum.radius,
-				conicalPendulum.anchorPos.y - conicalPendulum.height,
-				conicalPendulum.anchorPos.z - std::sinf(conicalPendulum.angle) * conicalPendulum.radius
-				}
-			);
-			sphere->Update();
+			Collision::Ball2PlaneIsCollision(ball, plane, kDeltaTime);
+			ball->Update();
 		}
 
 #pragma region imgui
@@ -95,9 +88,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		///
 
 		grid->Draw(camera->GetViewProjectionMatrix(), camera->GetViewportMatrix());
-		sphere->Draw(camera->GetViewProjectionMatrix(), camera->GetViewportMatrix());
-		conicalPendulum.Draw(camera->GetViewProjectionMatrix(), camera->GetViewportMatrix(), sphere->GetCenterPos());
-
+		plane->Draw(camera->GetViewProjectionMatrix(), camera->GetViewportMatrix());
+		ball->Draw(camera->GetViewProjectionMatrix(), camera->GetViewportMatrix());
+		
 		///
 		/// ↑描画処理ここまで
 		///

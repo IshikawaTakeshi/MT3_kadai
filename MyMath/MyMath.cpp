@@ -116,7 +116,7 @@ Vector3 MyMath::Project(const Vector3& v1, const Vector3& v2) {
 //最近接点
 Vector3 MyMath::ClosestPoint(const Vector3& point,Segment& segment) {
 	Vector3 result;
-	result = Add(segment.GetOrigin(), point);
+	result = segment.GetOrigin() + Project(point - segment.GetOrigin(), segment.GetDiff());
 	return result;
 }
 
