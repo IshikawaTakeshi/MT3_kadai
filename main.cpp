@@ -4,6 +4,7 @@
 #include "Grid/Grid.h"
 #include "Camera/Camera.h"
 #include "Sphere.h"
+#include "Segment.h"
 
 #ifdef _DEBUG
 #include <imgui.h>
@@ -23,12 +24,13 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	Camera* camera = new Camera();
 
 	//線分生成
-	Segment segment{ {-2.0f,-1.0f,0.0f},{3.0f,2.0f,2.0f} };
+	Segment* segment = new Segment();
+	segment->Initialize();
 	
 	//点の座標
 	Vector3 point{ -1.5f,0.6f,0.6f };
 	//正射影ベクトル
-	Vector3 project = MyMath::Project(MyMath::Subtract(point, segment.origin), segment.diff);
+	Vector3 project = MyMath::Project(MyMath::Subtract(point, segment->GetOrigin()), segment->GetDiff());
 	//最近接点
 	Vector3 closestPoint = MyMath::ClosestPoint(project, segment);
 	//点の生成
@@ -44,8 +46,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	Matrix4x4 viewportMatrix = MatrixMath::MakeViewportMatrix(0, 0, 1280.0f, 720.0f, 0.0f, 1.0f);
 
 	//線分の両端
-	Vector3 start = MatrixMath::Transform(MatrixMath::Transform(segment.origin, viewProjectionMatrix), viewportMatrix);
-	Vector3 end = MatrixMath::Transform(MatrixMath::Transform(segment.origin + segment.diff, viewProjectionMatrix), viewportMatrix);
+	Vector3 start = MatrixMath::Transform(MatrixMath::Transform(segment->GetOrigin(), viewProjectionMatrix), viewportMatrix);
+	Vector3 end = MatrixMath::Transform(MatrixMath::Transform(segment->GetOrigin() + segment->GetDiff(), viewProjectionMatrix), viewportMatrix);
 
 
 	// キー入力結果を受け取る箱
@@ -72,14 +74,19 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		viewProjectionMatrix = MatrixMath::Multiply(camera->GetViewMatrix(), projectionMatrix);
 
 		//点の更新
-		start = MatrixMath::Transform(MatrixMath::Transform(segment.origin, viewProjectionMatrix), viewportMatrix);
-		end = MatrixMath::Transform(MatrixMath::Transform(MyMath::Add(segment.origin, segment.diff), viewProjectionMatrix), viewportMatrix);
+		start = MatrixMath::Transform(MatrixMath::Transform(segment->GetOrigin(), viewProjectionMatrix), viewportMatrix);
+		end = MatrixMath::Transform(MatrixMath::Transform(MyMath::Add(segment->GetOrigin(), segment->GetDiff()), viewProjectionMatrix), viewportMatrix);
 
 		//ImGui
+		ImGui::Begin("Segment");
 		ImGui::InputFloat3("point", &point.x, "%.3f", ImGuiInputTextFlags_ReadOnly);
-		ImGui::InputFloat3("segment.origin", &segment.origin.x, "%.3f", ImGuiInputTextFlags_ReadOnly);
-		ImGui::InputFloat3("segment.diff", &segment.diff.x, "%.3f", ImGuiInputTextFlags_ReadOnly);
+		Vector3 segmentOrigin = segment->GetOrigin();
+		ImGui::InputFloat3("segment.origin", &segmentOrigin.x, "%.3f", ImGuiInputTextFlags_ReadOnly);
+
+		Vector3 segmentDiff = segment->GetDiff();
+		ImGui::InputFloat3("segment.diff", &segmentDiff.x, "%.3f", ImGuiInputTextFlags_ReadOnly);
 		ImGui::InputFloat3("Project", &project.x, "%.3f", ImGuiInputTextFlags_ReadOnly);
+		ImGui::End();
 		///
 		/// ↑更新処理ここまで
 		///

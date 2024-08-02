@@ -1,6 +1,6 @@
 ﻿#pragma once
+#include "Segment.h"
 #include <Vector3.h>
-#include "Lines.h"
 
 class MyMath {
 public:
@@ -42,7 +42,7 @@ public:
 	static Vector3 Project(const Vector3& v1, const Vector3& v2);
 
 	//最近接点
-	static Vector3 ClosestPoint(const Vector3& point, const Segment& segment);
+	static Vector3 ClosestPoint(const Vector3& point, Segment* segment);
 
 public:
 	
