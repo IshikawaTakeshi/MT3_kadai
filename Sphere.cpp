@@ -8,43 +8,39 @@
 #include <imgui.h>
 #endif // _DEBUG
 
-Sphere::Sphere(Vector3 centerPos, float radius) {
+Sphere::Sphere() {}
+
+Sphere::~Sphere() {}
+
+void Sphere::Initialize(Vector3 centerPos, float radius) {
 	centerPos_ = centerPos;
 	radius_ = radius;
-	worldMatrix_ = MatrixMath::MakeAffineMatrix({ 1.0f,1.0f,1.0f }, { 0.0f,0.0f,0.0f },centerPos_);
-}
-
-Sphere::~Sphere() {
+	worldMatrix_ = MatrixMath::MakeAffineMatrix({ 1.0f,1.0f,1.0f }, { 0.0f,0.0f,0.0f }, centerPos_);
+	color_ = 0xff0000ff;
 }
 
 void Sphere::Update() {
-	worldMatrix_ = MatrixMath::MakeAffineMatrix({ 1.0f,1.0f,1.0f }, { 0.0f,0.0f,0.0f }, centerPos_);
 
-#ifdef _DEBUG
-	ImGui::Begin("Window::Sphere");
-	ImGui::DragFloat3("SphereTranslate", &centerPos_.x, 0.01f);
-	ImGui::DragFloat("SphereRadius", &radius_, 0.01f);
-	ImGui::End();
-#endif // _DEBUG
+	worldMatrix_ = MatrixMath::MakeAffineMatrix({ 1.0f,1.0f,1.0f }, { 0.0f,0.0f,0.0f }, centerPos_);
 }
 
-void Sphere::Draw(const Matrix4x4& viewProjectionMatrix, const Matrix4x4& viewportMatrix, uint32_t color) {
+void Sphere::Draw(const Matrix4x4& viewProjectionMatrix, const Matrix4x4& viewportMatrix) {
 	const uint32_t kSubdivision = 16;
 	const float kLonEvery = static_cast<float>(M_PI) / static_cast<float>(kSubdivision); // 経度分割1つ分の角度
 	const float kLatEvery = 2.0f * static_cast<float>(M_PI) / static_cast<float>(kSubdivision); // 緯度分割1つ分の角度
-	
-	for (uint32_t latIndex = 0; latIndex < kSubdivision; ++latIndex){
+
+	for (uint32_t latIndex = 0; latIndex < kSubdivision; ++latIndex) {
 		float lat = static_cast<float>(-M_PI) / 2.0f + kLatEvery * latIndex; //現在の緯度
 
-		for (uint32_t lonIndex = 0; lonIndex < kSubdivision; ++lonIndex){
+		for (uint32_t lonIndex = 0; lonIndex < kSubdivision; ++lonIndex) {
 			float lon = lonIndex * kLonEvery; //現在の経度
 			//world座標系でのa,b,cを求める
 			Vector3 a, b, c;
 			Vector3 ndcA, ndcB, ndcC;
 			Vector3 screenA, screenB, screenC;
-			
+
 			//スクリーン座標に変換
-			a = MyMath::Multiply( radius_,{ std::cosf(lat) * std::cosf(lon),std::sinf(lat),std::cosf(lat) * std::sinf(lon) });
+			a = MyMath::Multiply(radius_, { std::cosf(lat) * std::cosf(lon),std::sinf(lat),std::cosf(lat) * std::sinf(lon) });
 			b = MyMath::Multiply(radius_, { std::cosf(lat + kLatEvery) * std::cosf(lon),std::sinf(lat + kLatEvery), std::cosf(lat + kLatEvery) * std::sinf(lon) });
 			c = MyMath::Multiply(radius_, { std::cosf(lat) * std::cosf(lon + kLonEvery),std::sinf(lat),std::cosf(lat) * std::sinf(lon + kLonEvery) });
 			ndcA = MatrixMath::Transform(a, MatrixMath::Multiply(worldMatrix_, viewProjectionMatrix));
@@ -60,14 +56,14 @@ void Sphere::Draw(const Matrix4x4& viewProjectionMatrix, const Matrix4x4& viewpo
 				static_cast<int>(screenA.y),
 				static_cast<int>(screenB.x),
 				static_cast<int>(screenB.y),
-				color
+				color_
 			);
 			Novice::DrawLine(
 				static_cast<int>(screenA.x),
 				static_cast<int>(screenA.y),
 				static_cast<int>(screenC.x),
 				static_cast<int>(screenC.y),
-				color
+				color_
 			);
 		}
 	}
