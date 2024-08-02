@@ -33,9 +33,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	Vector3 closestPoint = MyMath::ClosestPoint(project, segment);
 	//点の生成
 	Sphere* pointSphere = new Sphere();
-	pointSphere->Initialize(point, 0.1f);
+	pointSphere->Initialize(point, 0.01f);
 	Sphere* ClosestPointSphere = new Sphere();
-	ClosestPointSphere->Initialize(closestPoint, 0.1f);
+	ClosestPointSphere->Initialize(closestPoint, 0.01f);
+	ClosestPointSphere->SetColor(BLACK);
 	//射影行列
 	Matrix4x4 projectionMatrix = MatrixMath::MakePerspectiveFovMatrix(0.45f, 1280.0f / 720.0f, 0.1f, 100.0f);
 	Matrix4x4 viewProjectionMatrix = MatrixMath::Multiply(camera->GetViewMatrix(), projectionMatrix);
