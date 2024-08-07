@@ -3,7 +3,10 @@
 #include "Segment.h"
 #include "Triangle.h"
 #include "Ball.h"
+#include "AABB.h"
 #include "MyMath/MyMath.h"
+
+#include <algorithm>
 
 bool Collision::Segment2PlaneIsCollision(Segment* segment, Plane* plane) {
 
@@ -71,4 +74,68 @@ void Collision::Ball2PlaneIsCollision(Ball* ball, Plane* plane, float deltaTime)
 
 		ball->SetVelocity(projectNormal * e + movingDirection);
 	}
+}
+
+bool Collision::AABB2SegmentIsCollision(AABB* aabb, Segment* segment) {
+
+	//AABBを構成する平面との衝突点の媒介変数
+	Vector3 tPlaneMax;
+	Vector3 tPlaneMin;
+
+	//衝突点のうち近い方
+	Vector3 tNear;
+	//衝突点のうち遠い方
+	Vector3 tFar;
+	if(segment->GetDiff().x != 0.0f) {
+		tPlaneMax.x = (aabb->GetMax().x - segment->GetOrigin().x) / segment->GetDiff().x;
+		tPlaneMin.x = (aabb->GetMin().x - segment->GetOrigin().x) / segment->GetDiff().x;
+	} else {
+		tPlaneMax.x = std::numeric_limits<float>::infinity();
+		tPlaneMin.x = -std::numeric_limits<float>::infinity();
+	}
+
+	if (segment->GetDiff().y != 0.0f) {
+		tPlaneMax.y = (aabb->GetMax().y - segment->GetOrigin().y) / segment->GetDiff().y;
+		tPlaneMin.y = (aabb->GetMin().y - segment->GetOrigin().y) / segment->GetDiff().y;
+	} else {
+		tPlaneMax.y = std::numeric_limits<float>::infinity();
+		tPlaneMin.y = -std::numeric_limits<float>::infinity();
+	}
+
+	if (segment->GetDiff().z != 0.0f) {
+		tPlaneMax.z = (aabb->GetMax().z - segment->GetOrigin().z) / segment->GetDiff().z;
+		tPlaneMin.z = (aabb->GetMin().z - segment->GetOrigin().z) / segment->GetDiff().z;
+	} else {
+		tPlaneMax.z = std::numeric_limits<float>::infinity();
+		tPlaneMin.z = -std::numeric_limits<float>::infinity();
+	}
+
+
+	tNear.x = std::min(tPlaneMax.x, tPlaneMin.x);
+	tNear.y = std::min(tPlaneMax.y, tPlaneMin.y);
+	tNear.z = std::min(tPlaneMax.z, tPlaneMin.z);
+	tFar.x = std::max(tPlaneMax.x, tPlaneMin.x);
+	tFar.y = std::max(tPlaneMax.y, tPlaneMin.y);
+	tFar.z = std::max(tPlaneMax.z, tPlaneMin.z);
+
+	//AABBとの衝突点(貫通点)のt値が小さいほう
+	float tMin = std::max(std::max(tNear.x, tNear.y), tNear.z);
+	//AABBとの衝突点(貫通点)のt値が大きいほう
+	float tMax = std::min(std::min(tFar.x, tFar.y), tFar.z);
+
+	if (tMin > tMax) {
+		return false;
+	}
+
+	if (tMax < 0) {
+		return false;
+	}
+
+
+	if (tMin <= 1 && tMax >= 0) {
+		//衝突
+		return true;
+	}
+
+	return false;
 }

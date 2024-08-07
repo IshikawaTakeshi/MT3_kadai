@@ -6,11 +6,13 @@ class Plane;
 class Triangle;
 class Ball;
 class Plane;
+class AABB;
 namespace Collision {
 
 	bool Segment2PlaneIsCollision(Segment* segment, Plane* plane);
 	bool Segment2TriangleIsCollision(Segment* segment, Triangle* triangle);
 
 	void Ball2PlaneIsCollision(Ball* ball,Plane* plane,float deltaTime);
+	bool AABB2SegmentIsCollision(AABB* aabb, Segment* segment);
 };
 

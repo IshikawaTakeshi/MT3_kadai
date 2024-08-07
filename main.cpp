@@ -8,6 +8,7 @@
 #include "Ball.h"
 #include "Grid/Grid.h"
 #include "Plane.h"
+#include "AABB.h"
 #include "Collision.h"
 #include <imgui.h>
 
@@ -15,7 +16,7 @@
 static inline const float kDeltaTime = 1.0f / 60.0f;
 
 
-const char kWindowTitle[] = "LE2C_03_イシカワタケシ_MT3_04_04";
+const char kWindowTitle[] = "LE2C_03_イシカワタケシ_MT3_02_07";
 
 // Windowsアプリでのエントリーポイント(main関数)
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
@@ -23,16 +24,16 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	// ライブラリの初期化
 	Novice::Initialize(kWindowTitle, 1280, 720);
 
-	Plane* plane = new Plane();
-	plane->SetNormal(MyMath::Normalize({-0.2f,0.9f,-0.3f}));
-	plane->SetDistance(0.0f);
-	//球体の生成
-	Ball* ball = new Ball();
-	ball->Initialize({ 0.8f,1.2f,0.3f }, 0.05f);
-	ball->SetMass(2.0f);
-	ball->SetColor(WHITE);
-	//更新処理の実行フラグ
-	bool isUpdate = false;
+	//aabb
+	AABB* aabb = new AABB();
+	aabb->Initialize({ -0.5f, -0.5f, -0.5f }, { 0.5f, 0.5f, 0.5f });
+
+	//segment
+	Segment* segment = new Segment();
+	segment->Initialize({ -0.7f,0.3f,0.0f }, { 2.0f,-0.5f,0.0f });
+
+	Sphere* sphereDiff = new Sphere();
+	sphereDiff->Initialize(segment->GetDiff(), 0.01f);
 
 	// カメラの生成
 	Camera* camera = new Camera();
@@ -61,21 +62,22 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		// グリッドの更新
 		grid->Update();
 
-		plane->Update();
-		// ペンデュラムの更新
-		//pendulum.Update();
-		if (isUpdate == true) {
-			
-			Collision::Ball2PlaneIsCollision(ball, plane, kDeltaTime);
-			ball->Update();
+		//AAABBの更新
+		aabb->Update();
+
+		//segmentの更新
+		segment->Update();
+
+		//sphereDiffの更新
+		sphereDiff->SetCenterPos(segment->GetOrigin() + segment->GetDiff());
+		sphereDiff->Update();
+
+		if (Collision::AABB2SegmentIsCollision(aabb, segment) == true) {
+			aabb->SetColor(0xff0000ff);
+		} else {
+			aabb->SetColor(0xffffffff);
 		}
 
-#pragma region imgui
-		ImGui::Begin("Debug");
-		ImGui::Checkbox("Update", &isUpdate);
-
-		ImGui::End();
-#pragma endregion
 
 		///
 		/// ↑更新処理ここまで
@@ -88,9 +90,13 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		///
 
 		grid->Draw(camera->GetViewProjectionMatrix(), camera->GetViewportMatrix());
-		plane->Draw(camera->GetViewProjectionMatrix(), camera->GetViewportMatrix());
-		ball->Draw(camera->GetViewProjectionMatrix(), camera->GetViewportMatrix());
-		
+
+		aabb->Draw(camera->GetViewProjectionMatrix(), camera->GetViewportMatrix());
+
+		segment->Draw(camera->GetViewProjectionMatrix(), camera->GetViewportMatrix());
+
+		sphereDiff->Draw(camera->GetViewProjectionMatrix(), camera->GetViewportMatrix());
+
 		///
 		/// ↑描画処理ここまで
 		///

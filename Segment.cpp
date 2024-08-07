@@ -8,23 +8,21 @@
 
 #include <imgui.h>
 
-void Segment::Initialize() {
+void Segment::Initialize(Vector3 origin, Vector3 diff) {
 
-	origin_ = { 0.0f,1.0f,0.0f };
-	diff_ = { 0.0f,0.0f,2.0f };
-	worldMatrix_ = MatrixMath::MakeAffineMatrix({ 1.0f,1.0f,1.0f }, rotate_, origin_);
+	origin_ = origin;
+	diff_ = diff;
+	worldMatrixOrigin_ = MatrixMath::MakeAffineMatrix({ 1.0f,1.0f,1.0f }, rotate_, origin_);
 	color_ = 0xffffffff;
 }
 
-void Segment::Update(Triangle* triangle) {
+void Segment::Update() {
 
-	//終点
-	//Vector3 endPoint;
-	//endPoint = origin_ + diff_;
+
+	
 	//行列の更新
-	worldMatrix_ = MatrixMath::MakeAffineMatrix({ 1.0f,1.0f,1.0f }, rotate_, origin_);
-
-	//衝突した時の処理(plane)
+	worldMatrixOrigin_ = MatrixMath::MakeAffineMatrix({ 1.0f,1.0f,1.0f }, rotate_, origin_);
+		//衝突した時の処理(plane)
 	//if (plane) {
 	//	if (IsCollision(plane) == true) {
 	//		color_ = 0xff0000ff;
@@ -34,13 +32,13 @@ void Segment::Update(Triangle* triangle) {
 	//}
 
 	//衝突した時の処理(triangle)
-	if (triangle) {
-		if (IsCollision(triangle) == true) {
-			color_ = 0xff0000ff;
-		} else {
-			color_ = 0xffffffff;
-		}
-	}
+	//if (triangle) {
+	//	if (IsCollision(triangle) == true) {
+	//		color_ = 0xff0000ff;
+	//	} else {
+	//		color_ = 0xffffffff;
+	//	}
+	//}
 
 	ImGui::Begin("Segment");
 	ImGui::DragFloat3("SegmentTransform", &origin_.x, 0.01f);
