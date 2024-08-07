@@ -7,6 +7,9 @@
 struct PlaneData;
 class Sphere {
 public:
+	/////////////////////////////////////////////////////////////////////////
+	///		public 関数
+	/////////////////////////////////////////////////////////////////////////
 
 	/// <summary>
 	/// コンストラクタ
@@ -32,6 +35,8 @@ public:
 	/// </summary>
 	virtual void Update();
 
+	void UpdateImGui();
+
 	/// <summary>
 	/// 描画処理
 	/// </summary>
@@ -46,23 +51,37 @@ public:
 	/// <returns></returns>
 	bool IsCollision(const PlaneData& plane);
 
-	//getter
+public:
+	/////////////////////////////////////////////////////////////////////////
+	///		getter
+	/////////////////////////////////////////////////////////////////////////
+
 	virtual const Matrix4x4& GetWorldMatrix() { return worldMatrix_; }
 	virtual const Vector3& GetCenterPos() { return centerPos_; }
 	virtual const float& GetRadius() { return radius_; }
 
-	//setter
+public:
+	/////////////////////////////////////////////////////////////////////////
+	//		setter
+	/////////////////////////////////////////////////////////////////////////
+
 	void SetCenterPos(Vector3 transform) { centerPos_ = transform; }
 	void SetColor(uint32_t color) { color_ = color; }
 	void SetRadius(float radius) { radius_ = radius; }
 	void SetWorldMatrix(Matrix4x4 worldMatrix) { worldMatrix_ = worldMatrix; }
 
 protected:
+	/////////////////////////////////////////////////////////////////////////
+	///		protected 変数
+	/////////////////////////////////////////////////////////////////////////
 
 	//中心座標
 	Vector3 centerPos_;
+	//半径
 	float radius_;
+	//ワールド行列
 	Matrix4x4 worldMatrix_;
+	//カラー
 	uint32_t color_;
 };
 

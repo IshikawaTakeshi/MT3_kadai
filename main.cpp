@@ -9,6 +9,7 @@
 #include "Grid/Grid.h"
 #include "Plane.h"
 #include "AABB.h"
+#include "OBB.h"
 #include "Collision.h"
 #include <imgui.h>
 
@@ -24,16 +25,15 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	// ライブラリの初期化
 	Novice::Initialize(kWindowTitle, 1280, 720);
 
-	//aabb
-	AABB* aabb = new AABB();
-	aabb->Initialize({ -0.5f, -0.5f, -0.5f }, { 0.5f, 0.5f, 0.5f });
+	Vector3 orientations[3] = { {1.0f, 0.0f, 0.0f}, {0.0f, 1.0f, 0.0f}, {0.0f, 0.0f, 1.0f} };
 
-	//segment
-	Segment* segment = new Segment();
-	segment->Initialize({ -0.7f,0.3f,0.0f }, { 2.0f,-0.5f,0.0f });
+	//OBB
+	OBB* obb = new OBB();
+	obb->Initialize({ 0.0f, 0.0f, 0.0f },orientations,{ 0.5f, 0.5f, 0.5f });
 
-	Sphere* sphereDiff = new Sphere();
-	sphereDiff->Initialize(segment->GetDiff(), 0.01f);
+	//Sphere
+	Sphere* sphere = new Sphere();
+	sphere->Initialize({ 0.0f, 0.0f, 0.0f }, 0.5f);
 
 	// カメラの生成
 	Camera* camera = new Camera();
@@ -62,22 +62,22 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		// グリッドの更新
 		grid->Update();
 
-		//AAABBの更新
-		aabb->Update();
+		//OBBの更新
+		obb->Update();
 
-		//segmentの更新
-		segment->Update();
+		//Sphereの更新
+		sphere->Update();
 
-		//sphereDiffの更新
-		sphereDiff->SetCenterPos(segment->GetOrigin() + segment->GetDiff());
-		sphereDiff->Update();
-
-		if (Collision::AABB2SegmentIsCollision(aabb, segment) == true) {
-			aabb->SetColor(0xff0000ff);
+		if (Collision::OBB2SphereIsCollision(obb, sphere) == true) {
+			sphere->SetColor(0xff0000ff);
 		} else {
-			aabb->SetColor(0xffffffff);
+			sphere->SetColor(0xffffffff);
 		}
 
+		ImGui::Begin("Debug");
+		obb->UpdateImGui();
+		sphere->UpdateImGui();
+		ImGui::End();
 
 		///
 		/// ↑更新処理ここまで
@@ -91,12 +91,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 		grid->Draw(camera->GetViewProjectionMatrix(), camera->GetViewportMatrix());
 
-		aabb->Draw(camera->GetViewProjectionMatrix(), camera->GetViewportMatrix());
+		//OBBの描画
+		obb->Draw(camera->GetViewProjectionMatrix(), camera->GetViewportMatrix());
 
-		segment->Draw(camera->GetViewProjectionMatrix(), camera->GetViewportMatrix());
-
-		sphereDiff->Draw(camera->GetViewProjectionMatrix(), camera->GetViewportMatrix());
-
+		//Sphereの描画
+		sphere->Draw(camera->GetViewProjectionMatrix(), camera->GetViewportMatrix());
+		
 		///
 		/// ↑描画処理ここまで
 		///

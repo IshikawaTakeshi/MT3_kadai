@@ -32,11 +32,6 @@ public:
 	/// </summary>
 	bool IsCollision(const AABB& aabb2);
 
-	/// <summary>
-	/// 球体との当たり判定
-	/// </summary>
-	bool IsCollision(Sphere* sphere);
-
 public:
 
 	Vector3 GetMin() { return min_; }

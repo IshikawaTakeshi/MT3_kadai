@@ -45,8 +45,13 @@ public:
 	//Z軸回転行列
 	static Matrix4x4 MakeRotateZMatrix(float radian);
 
+	//回転行列
+	static Matrix4x4 MakeRotateMatrix(const Vector3& rotate);
+
 	//3次元アフィン変換行列
 	static Matrix4x4 MakeAffineMatrix(const Vector3& scale, const Vector3& rotate, const Vector3& translate);
+	//obbの3次元アフィン変換行列
+	static Matrix4x4 MakeAffineMatrix(const Vector3& size, Vector3 orientation[3], const Vector3& translate);
 
 	//透視投影行列
 	static Matrix4x4 MakePerspectiveFovMatrix(float fovY, float aspectRatio, float nearClip, float farClip);

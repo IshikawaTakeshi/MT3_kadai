@@ -4,7 +4,9 @@
 #include "Triangle.h"
 #include "Ball.h"
 #include "AABB.h"
+#include "OBB.h"
 #include "MyMath/MyMath.h"
+#include "MyMath/MatrixMath.h"
 
 #include <algorithm>
 
@@ -138,4 +140,54 @@ bool Collision::AABB2SegmentIsCollision(AABB* aabb, Segment* segment) {
 	}
 
 	return false;
+}
+
+bool Collision::AABB2SphereIsCollision(AABB* aabb, Sphere* sphere) {
+	//最近接点を求める
+	Vector3 closestPoint{
+		std::clamp(sphere->GetCenterPos().x,aabb->GetMin().x,aabb->GetMax().x),
+		std::clamp(sphere->GetCenterPos().y,aabb->GetMin().y,aabb->GetMax().y),
+		std::clamp(sphere->GetCenterPos().z,aabb->GetMin().z,aabb->GetMax().z)
+	};
+	//最近接点と球の中心との距離を求める
+	float distance = MyMath::Length(closestPoint - sphere->GetCenterPos());
+	//距離が半径よりも小さければ衝突
+	if (distance <= sphere->GetRadius()) {
+		return true;
+	}
+
+	return false;
+}
+
+bool Collision::OBB2SphereIsCollision(OBB* obb, Sphere* sphere) {
+
+	// 球の中心をOBBのローカル座標系に変換
+	Vector3 d = sphere->GetCenterPos() - obb->GetCenterPos();
+	Vector3 localCenter;
+	localCenter.x = MyMath::Dot(d, obb->GetOrientation(0));
+	localCenter.y = MyMath::Dot(d, obb->GetOrientation(1));
+	localCenter.z = MyMath::Dot(d, obb->GetOrientation(2));
+
+	// 最近接点の計算
+	Vector3 closestPoint = localCenter;
+	closestPoint.x = (std::max)(-obb->GetSize().x, (std::min)(obb->GetSize().x, closestPoint.x));
+	closestPoint.y = (std::max)(-obb->GetSize().y, (std::min)(obb->GetSize().y, closestPoint.y));
+	closestPoint.z = (std::max)(-obb->GetSize().z, (std::min)(obb->GetSize().z, closestPoint.z));
+
+	// OBBのローカル座標系からワールド座標系に戻す
+	Vector3 closestPointWorld = obb->GetCenterPos() +
+		MyMath::Multiply(closestPoint.x, obb->GetOrientation(0)) +
+		MyMath::Multiply(closestPoint.y, obb->GetOrientation(1)) +
+		MyMath::Multiply(closestPoint.z, obb->GetOrientation(2));
+
+	// 球の中心と最近接点の距離を計算
+	float distance = MyMath::Length(sphere->GetCenterPos() - closestPointWorld);
+
+	if (distance <= sphere->GetRadius()) {
+
+		return true;
+	} else {
+
+		return false;
+	}
 }

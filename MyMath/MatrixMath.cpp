@@ -210,6 +210,14 @@ Matrix4x4 MatrixMath::MakeRotateZMatrix(float radian) {
 	return reslut;
 }
 
+Matrix4x4 MatrixMath::MakeRotateMatrix(const Vector3& rotate) {
+	Matrix4x4 rotateXMatrix = MakeRotateXMatrix(rotate.x);
+	Matrix4x4 rotateYMatrix = MakeRotateYMatrix(rotate.y);
+	Matrix4x4 rotateZMatrix = MakeRotateZMatrix(rotate.z);
+	Matrix4x4 rotateMatrix = Multiply(rotateXMatrix, Multiply(rotateYMatrix, rotateZMatrix));
+	return rotateMatrix;
+}
+
 //3次元アフィン変換行列
 Matrix4x4 MatrixMath::MakeAffineMatrix(const Vector3& scale, const Vector3& rotate, const Vector3& translate) {
 	Matrix4x4 rotateXMatrix = MakeRotateXMatrix(rotate.x);
@@ -220,6 +228,16 @@ Matrix4x4 MatrixMath::MakeAffineMatrix(const Vector3& scale, const Vector3& rota
 		scale.x * rotateMatrix.m[0][0],scale.x * rotateMatrix.m[0][1],scale.x * rotateMatrix.m[0][2],0,
 		scale.y * rotateMatrix.m[1][0],scale.y * rotateMatrix.m[1][1],scale.y * rotateMatrix.m[1][2],0,
 		scale.z * rotateMatrix.m[2][0],scale.z * rotateMatrix.m[2][1],scale.z * rotateMatrix.m[2][2],0,
+		translate.x,translate.y,translate.z,1.0f
+	};
+	return result;
+}
+
+Matrix4x4 MatrixMath::MakeAffineMatrix(const Vector3& size, Vector3 orientation[3], const Vector3& translate) {
+	Matrix4x4 result = {
+		size.x * orientation[0].x,size.x * orientation[0].x,size.x * orientation[0].x,0,
+		size.y * orientation[1].y,size.y * orientation[1].y,size.y * orientation[1].y,0,
+		size.z * orientation[2].z,size.z * orientation[2].z,size.z * orientation[2].z,0,
 		translate.x,translate.y,translate.z,1.0f
 	};
 	return result;

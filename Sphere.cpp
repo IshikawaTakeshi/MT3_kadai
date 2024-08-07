@@ -25,6 +25,13 @@ void Sphere::Update() {
 	worldMatrix_ = MatrixMath::MakeAffineMatrix({ 1.0f,1.0f,1.0f }, { 0.0f,0.0f,0.0f }, centerPos_);
 }
 
+void Sphere::UpdateImGui() {
+
+	ImGui::Text("Sphere");
+	ImGui::DragFloat3("CenterPos", &centerPos_.x, 0.01f);
+	ImGui::DragFloat("Radius", &radius_, 0.01f);
+}
+
 void Sphere::Draw(const Matrix4x4& viewProjectionMatrix, const Matrix4x4& viewportMatrix) {
 	const uint32_t kSubdivision = 16;
 	const float kLonEvery = static_cast<float>(M_PI) / static_cast<float>(kSubdivision); // 経度分割1つ分の角度
